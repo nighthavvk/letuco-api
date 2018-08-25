@@ -1,0 +1,919 @@
+  [1m[35m (114.5ms)[0m  [1m[35mDROP DATABASE IF EXISTS "acco_test"[0m
+  [1m[35m (560.3ms)[0m  [1m[35mCREATE DATABASE "acco_test" ENCODING = 'utf8'[0m
+  [1m[35mSQL (0.8ms)[0m  [1m[35mCREATE EXTENSION IF NOT EXISTS "plpgsql"[0m
+  [1m[35m (0.2ms)[0m  [1m[35mDROP TABLE IF EXISTS "accounts" CASCADE[0m
+  [1m[35m (9.3ms)[0m  [1m[35mCREATE TABLE "accounts" ("id" bigserial primary key, "created_at" timestamp NOT NULL, "updated_at" timestamp NOT NULL)[0m
+  [1m[35m (0.2ms)[0m  [1m[35mDROP TABLE IF EXISTS "customers" CASCADE[0m
+  [1m[35m (5.3ms)[0m  [1m[35mCREATE TABLE "customers" ("id" bigserial primary key, "account_id" bigint, "created_at" timestamp NOT NULL, "updated_at" timestamp NOT NULL)[0m
+  [1m[35m (6.3ms)[0m  [1m[35mCREATE  INDEX  "index_customers_on_account_id" ON "customers"  ("account_id")[0m
+  [1m[35m (0.4ms)[0m  [1m[35mDROP TABLE IF EXISTS "orders" CASCADE[0m
+  [1m[35m (15.4ms)[0m  [1m[35mCREATE TABLE "orders" ("id" bigserial primary key, "shop_id" bigint, "seller_id" bigint, "status" character varying, "created_at" timestamp NOT NULL, "updated_at" timestamp NOT NULL)[0m
+  [1m[35m (5.1ms)[0m  [1m[35mCREATE  INDEX  "index_orders_on_seller_id" ON "orders"  ("seller_id")[0m
+  [1m[35m (5.2ms)[0m  [1m[35mCREATE  INDEX  "index_orders_on_shop_id" ON "orders"  ("shop_id")[0m
+  [1m[35m (0.5ms)[0m  [1m[35mDROP TABLE IF EXISTS "orders_products" CASCADE[0m
+  [1m[35m (2.7ms)[0m  [1m[35mCREATE TABLE "orders_products" ("order_id" bigint NOT NULL, "product_id" bigint NOT NULL)[0m
+  [1m[35m (7.9ms)[0m  [1m[35mCREATE  INDEX  "index_orders_products_on_order_id_and_product_id" ON "orders_products"  ("order_id", "product_id")[0m
+  [1m[35m (0.6ms)[0m  [1m[35mDROP TABLE IF EXISTS "products" CASCADE[0m
+  [1m[35m (17.6ms)[0m  [1m[35mCREATE TABLE "products" ("id" bigserial primary key, "shop_id" bigint, "name" character varying, "created_at" timestamp NOT NULL, "updated_at" timestamp NOT NULL)[0m
+  [1m[35m (4.2ms)[0m  [1m[35mCREATE  INDEX  "index_products_on_shop_id" ON "products"  ("shop_id")[0m
+  [1m[35m (0.4ms)[0m  [1m[35mDROP TABLE IF EXISTS "sellers" CASCADE[0m
+  [1m[35m (11.0ms)[0m  [1m[35mCREATE TABLE "sellers" ("id" bigserial primary key, "account_id" bigint, "name" character varying, "created_at" timestamp NOT NULL, "updated_at" timestamp NOT NULL)[0m
+  [1m[35m (7.1ms)[0m  [1m[35mCREATE  INDEX  "index_sellers_on_account_id" ON "sellers"  ("account_id")[0m
+  [1m[35m (0.4ms)[0m  [1m[35mDROP TABLE IF EXISTS "shops" CASCADE[0m
+  [1m[35m (9.7ms)[0m  [1m[35mCREATE TABLE "shops" ("id" bigserial primary key, "account_id" bigint, "name" character varying, "created_at" timestamp NOT NULL, "updated_at" timestamp NOT NULL)[0m
+  [1m[35m (7.2ms)[0m  [1m[35mCREATE  INDEX  "index_shops_on_account_id" ON "shops"  ("account_id")[0m
+  [1m[35m (8.2ms)[0m  [1m[35mALTER TABLE "customers" ADD CONSTRAINT "fk_rails_ed7ccfecee"
+FOREIGN KEY ("account_id")
+  REFERENCES "accounts" ("id")
+[0m
+  [1m[35m (5.8ms)[0m  [1m[35mALTER TABLE "orders" ADD CONSTRAINT "fk_rails_f569184c98"
+FOREIGN KEY ("seller_id")
+  REFERENCES "sellers" ("id")
+[0m
+  [1m[35m (5.3ms)[0m  [1m[35mALTER TABLE "orders" ADD CONSTRAINT "fk_rails_7e761c2e1b"
+FOREIGN KEY ("shop_id")
+  REFERENCES "shops" ("id")
+[0m
+  [1m[35m (4.9ms)[0m  [1m[35mALTER TABLE "products" ADD CONSTRAINT "fk_rails_b169a26347"
+FOREIGN KEY ("shop_id")
+  REFERENCES "shops" ("id")
+[0m
+  [1m[35m (6.2ms)[0m  [1m[35mALTER TABLE "sellers" ADD CONSTRAINT "fk_rails_77542c579b"
+FOREIGN KEY ("account_id")
+  REFERENCES "accounts" ("id")
+[0m
+  [1m[35m (6.7ms)[0m  [1m[35mALTER TABLE "shops" ADD CONSTRAINT "fk_rails_151e999ffd"
+FOREIGN KEY ("account_id")
+  REFERENCES "accounts" ("id")
+[0m
+  [1m[35m (9.7ms)[0m  [1m[35mCREATE TABLE "schema_migrations" ("version" character varying NOT NULL PRIMARY KEY)[0m
+  [1m[35m (0.5ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (1.9ms)[0m  [1m[32mINSERT INTO "schema_migrations" (version) VALUES (20180821070902)[0m
+  [1m[35m (1.3ms)[0m  [1m[32mINSERT INTO "schema_migrations" (version) VALUES
+(20180820130854),
+(20180820132405),
+(20180820132600),
+(20180820132640),
+(20180820132515),
+(20180820132544);
+
+[0m
+  [1m[35m (13.2ms)[0m  [1m[35mCREATE TABLE "ar_internal_metadata" ("key" character varying NOT NULL PRIMARY KEY, "value" character varying, "created_at" timestamp NOT NULL, "updated_at" timestamp NOT NULL)[0m
+  [1m[36mActiveRecord::InternalMetadata Load (1.0ms)[0m  [1m[34mSELECT  "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 LIMIT $2[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[35m (0.5ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mActiveRecord::InternalMetadata Create (1.1ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "key"[0m  [["key", "environment"], ["value", "test"], ["created_at", "2018-08-25 15:59:06.529604"], ["updated_at", "2018-08-25 15:59:06.529604"]]
+  [1m[35m (2.7ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.8ms)[0m  [1m[34mSELECT  "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 LIMIT $2[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[35m (0.3ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (0.5ms)[0m  [1m[35mCOMMIT[0m
+  [1m[35m (0.6ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.6ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.5ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.6ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.6ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.6ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.3ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (0.1ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.6ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (0.3ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.6ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.3ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (0.3ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.6ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.3ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (0.3ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.5ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (0.1ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.6ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (0.3ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.6ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (0.3ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.5ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (0.1ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mAccount Create (0.8ms)[0m  [1m[32mINSERT INTO "accounts" ("created_at", "updated_at") VALUES ($1, $2) RETURNING "id"[0m  [["created_at", "2018-08-25 16:30:32.826637"], ["updated_at", "2018-08-25 16:30:32.826637"]]
+  [1m[35m (0.1ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.6ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.3ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (0.2ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mAccount Create (0.5ms)[0m  [1m[32mINSERT INTO "accounts" ("created_at", "updated_at") VALUES ($1, $2) RETURNING "id"[0m  [["created_at", "2018-08-25 16:31:02.519655"], ["updated_at", "2018-08-25 16:31:02.519655"]]
+  [1m[35m (0.2ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.6ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.3ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (0.3ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.6ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (0.2ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.6ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (0.2ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.7ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (0.2ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mAccount Create (0.5ms)[0m  [1m[32mINSERT INTO "accounts" ("created_at", "updated_at") VALUES ($1, $2) RETURNING "id"[0m  [["created_at", "2018-08-25 16:33:14.694978"], ["updated_at", "2018-08-25 16:33:14.694978"]]
+  [1m[35m (0.2ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.6ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.3ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (0.2ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mAccount Create (0.5ms)[0m  [1m[32mINSERT INTO "accounts" ("created_at", "updated_at") VALUES ($1, $2) RETURNING "id"[0m  [["created_at", "2018-08-25 16:38:39.907576"], ["updated_at", "2018-08-25 16:38:39.907576"]]
+  [1m[35m (0.2ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+Started GET "/api/v1/accounts/4/shops" for 127.0.0.1 at 2018-08-25 19:38:39 +0300
+Processing by Api::V1::ShopsController#index as HTML
+  Parameters: {"account_id"=>"4"}
+  [1m[36mAccount Load (0.4ms)[0m  [1m[34mSELECT  "accounts".* FROM "accounts" WHERE "accounts"."id" = $1 LIMIT $2[0m  [["id", 4], ["LIMIT", 1]]
+  [1m[36mShop Load (0.4ms)[0m  [1m[34mSELECT "shops".* FROM "shops" WHERE "shops"."account_id" = $1[0m  [["account_id", 4]]
+Completed 200 OK in 17ms (Views: 4.5ms | ActiveRecord: 2.3ms)
+  [1m[35m (0.2ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.6ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (0.2ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mAccount Create (0.5ms)[0m  [1m[32mINSERT INTO "accounts" ("created_at", "updated_at") VALUES ($1, $2) RETURNING "id"[0m  [["created_at", "2018-08-25 16:39:10.419628"], ["updated_at", "2018-08-25 16:39:10.419628"]]
+  [1m[35m (0.2ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+Started GET "/api/v1/accounts/5/shops" for 127.0.0.1 at 2018-08-25 19:39:10 +0300
+Processing by Api::V1::ShopsController#index as HTML
+  Parameters: {"account_id"=>"5"}
+  [1m[36mAccount Load (0.3ms)[0m  [1m[34mSELECT  "accounts".* FROM "accounts" WHERE "accounts"."id" = $1 LIMIT $2[0m  [["id", 5], ["LIMIT", 1]]
+  [1m[36mShop Load (0.4ms)[0m  [1m[34mSELECT "shops".* FROM "shops" WHERE "shops"."account_id" = $1[0m  [["account_id", 5]]
+Completed 200 OK in 11ms (Views: 2.8ms | ActiveRecord: 2.4ms)
+  [1m[35m (0.3ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.5ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (0.1ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mAccount Create (0.4ms)[0m  [1m[32mINSERT INTO "accounts" ("created_at", "updated_at") VALUES ($1, $2) RETURNING "id"[0m  [["created_at", "2018-08-25 16:39:29.921572"], ["updated_at", "2018-08-25 16:39:29.921572"]]
+  [1m[35m (0.1ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+Started GET "/api/v1/accounts/6/shops" for 127.0.0.1 at 2018-08-25 19:39:29 +0300
+Processing by Api::V1::ShopsController#index as HTML
+  Parameters: {"account_id"=>"6"}
+  [1m[36mAccount Load (0.2ms)[0m  [1m[34mSELECT  "accounts".* FROM "accounts" WHERE "accounts"."id" = $1 LIMIT $2[0m  [["id", 6], ["LIMIT", 1]]
+  [1m[36mShop Load (0.2ms)[0m  [1m[34mSELECT "shops".* FROM "shops" WHERE "shops"."account_id" = $1[0m  [["account_id", 6]]
+Completed 200 OK in 12ms (Views: 2.5ms | ActiveRecord: 1.8ms)
+  [1m[35m (0.3ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.6ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (0.2ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mAccount Create (0.5ms)[0m  [1m[32mINSERT INTO "accounts" ("created_at", "updated_at") VALUES ($1, $2) RETURNING "id"[0m  [["created_at", "2018-08-25 16:39:59.235589"], ["updated_at", "2018-08-25 16:39:59.235589"]]
+  [1m[35m (0.2ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+Started GET "/api/v1/accounts/7/shops" for 127.0.0.1 at 2018-08-25 19:39:59 +0300
+Processing by Api::V1::ShopsController#index as HTML
+  Parameters: {"account_id"=>"7"}
+  [1m[36mAccount Load (0.4ms)[0m  [1m[34mSELECT  "accounts".* FROM "accounts" WHERE "accounts"."id" = $1 LIMIT $2[0m  [["id", 7], ["LIMIT", 1]]
+  [1m[36mShop Load (0.4ms)[0m  [1m[34mSELECT "shops".* FROM "shops" WHERE "shops"."account_id" = $1[0m  [["account_id", 7]]
+Completed 200 OK in 13ms (Views: 2.7ms | ActiveRecord: 2.3ms)
+  [1m[35m (0.3ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.5ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (0.1ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mAccount Create (0.4ms)[0m  [1m[32mINSERT INTO "accounts" ("created_at", "updated_at") VALUES ($1, $2) RETURNING "id"[0m  [["created_at", "2018-08-25 16:40:30.917408"], ["updated_at", "2018-08-25 16:40:30.917408"]]
+  [1m[35m (0.1ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+Started GET "/api/v1/accounts/8/shops" for 127.0.0.1 at 2018-08-25 19:40:30 +0300
+Processing by Api::V1::ShopsController#index as HTML
+  Parameters: {"account_id"=>"8"}
+  [1m[36mAccount Load (0.2ms)[0m  [1m[34mSELECT  "accounts".* FROM "accounts" WHERE "accounts"."id" = $1 LIMIT $2[0m  [["id", 8], ["LIMIT", 1]]
+  [1m[36mShop Load (0.3ms)[0m  [1m[34mSELECT "shops".* FROM "shops" WHERE "shops"."account_id" = $1[0m  [["account_id", 8]]
+Completed 200 OK in 12ms (Views: 2.5ms | ActiveRecord: 1.8ms)
+  [1m[35m (0.2ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.5ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (0.1ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mAccount Create (0.4ms)[0m  [1m[32mINSERT INTO "accounts" ("created_at", "updated_at") VALUES ($1, $2) RETURNING "id"[0m  [["created_at", "2018-08-25 16:44:22.330327"], ["updated_at", "2018-08-25 16:44:22.330327"]]
+  [1m[35m (0.1ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+Started GET "/api/v1/accounts/9/shops" for 127.0.0.1 at 2018-08-25 19:44:22 +0300
+Processing by Api::V1::ShopsController#index as HTML
+  Parameters: {"account_id"=>"9"}
+  [1m[36mAccount Load (0.2ms)[0m  [1m[34mSELECT  "accounts".* FROM "accounts" WHERE "accounts"."id" = $1 LIMIT $2[0m  [["id", 9], ["LIMIT", 1]]
+  [1m[36mShop Load (0.2ms)[0m  [1m[34mSELECT "shops".* FROM "shops" WHERE "shops"."account_id" = $1[0m  [["account_id", 9]]
+Completed 200 OK in 12ms (Views: 2.5ms | ActiveRecord: 1.8ms)
+  [1m[35m (0.2ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.5ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (0.1ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mAccount Create (0.4ms)[0m  [1m[32mINSERT INTO "accounts" ("created_at", "updated_at") VALUES ($1, $2) RETURNING "id"[0m  [["created_at", "2018-08-25 16:44:52.277129"], ["updated_at", "2018-08-25 16:44:52.277129"]]
+  [1m[35m (0.1ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+Started GET "/api/v1/accounts/10/shops" for 127.0.0.1 at 2018-08-25 19:44:52 +0300
+Processing by Api::V1::ShopsController#index as HTML
+  Parameters: {"account_id"=>"10"}
+  [1m[36mAccount Load (0.2ms)[0m  [1m[34mSELECT  "accounts".* FROM "accounts" WHERE "accounts"."id" = $1 LIMIT $2[0m  [["id", 10], ["LIMIT", 1]]
+  [1m[36mShop Load (0.2ms)[0m  [1m[34mSELECT "shops".* FROM "shops" WHERE "shops"."account_id" = $1[0m  [["account_id", 10]]
+Completed 200 OK in 12ms (Views: 2.6ms | ActiveRecord: 1.7ms)
+  [1m[35m (0.3ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mShop Exists (0.5ms)[0m  [1m[34mSELECT  1 AS one FROM "shops" WHERE "shops"."name" = $1 AND "shops"."account_id" = $2 LIMIT $3[0m  [["name", "CooP"], ["account_id", 10], ["LIMIT", 1]]
+  [1m[36mShop Create (1.8ms)[0m  [1m[32mINSERT INTO "shops" ("account_id", "name", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "id"[0m  [["account_id", 10], ["name", "CooP"], ["created_at", "2018-08-25 16:44:52.310570"], ["updated_at", "2018-08-25 16:44:52.310570"]]
+  [1m[35m (0.2ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+Started GET "/api/v1/accounts/10/shops" for 127.0.0.1 at 2018-08-25 19:44:52 +0300
+Processing by Api::V1::ShopsController#index as HTML
+  Parameters: {"account_id"=>"10"}
+  [1m[36mAccount Load (0.2ms)[0m  [1m[34mSELECT  "accounts".* FROM "accounts" WHERE "accounts"."id" = $1 LIMIT $2[0m  [["id", 10], ["LIMIT", 1]]
+  [1m[36mShop Load (0.3ms)[0m  [1m[34mSELECT "shops".* FROM "shops" WHERE "shops"."account_id" = $1[0m  [["account_id", 10]]
+Completed 200 OK in 2ms (Views: 1.2ms | ActiveRecord: 0.5ms)
+  [1m[35m (0.2ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.5ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (0.1ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mAccount Create (0.4ms)[0m  [1m[32mINSERT INTO "accounts" ("created_at", "updated_at") VALUES ($1, $2) RETURNING "id"[0m  [["created_at", "2018-08-25 16:45:43.947321"], ["updated_at", "2018-08-25 16:45:43.947321"]]
+  [1m[35m (0.1ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+Started GET "/api/v1/accounts/11/shops" for 127.0.0.1 at 2018-08-25 19:45:43 +0300
+Processing by Api::V1::ShopsController#index as HTML
+  Parameters: {"account_id"=>"11"}
+  [1m[36mAccount Load (0.2ms)[0m  [1m[34mSELECT  "accounts".* FROM "accounts" WHERE "accounts"."id" = $1 LIMIT $2[0m  [["id", 11], ["LIMIT", 1]]
+  [1m[36mShop Load (0.2ms)[0m  [1m[34mSELECT "shops".* FROM "shops" WHERE "shops"."account_id" = $1[0m  [["account_id", 11]]
+Completed 200 OK in 12ms (Views: 2.6ms | ActiveRecord: 1.7ms)
+  [1m[35m (0.1ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mShop Exists (0.4ms)[0m  [1m[34mSELECT  1 AS one FROM "shops" WHERE "shops"."name" = $1 AND "shops"."account_id" = $2 LIMIT $3[0m  [["name", "CooP"], ["account_id", 11], ["LIMIT", 1]]
+  [1m[36mShop Create (0.5ms)[0m  [1m[32mINSERT INTO "shops" ("account_id", "name", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "id"[0m  [["account_id", 11], ["name", "CooP"], ["created_at", "2018-08-25 16:45:43.980048"], ["updated_at", "2018-08-25 16:45:43.980048"]]
+  [1m[35m (0.1ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+Started GET "/api/v1/accounts/11/shops" for 127.0.0.1 at 2018-08-25 19:45:43 +0300
+Processing by Api::V1::ShopsController#index as HTML
+  Parameters: {"account_id"=>"11"}
+  [1m[36mAccount Load (0.2ms)[0m  [1m[34mSELECT  "accounts".* FROM "accounts" WHERE "accounts"."id" = $1 LIMIT $2[0m  [["id", 11], ["LIMIT", 1]]
+  [1m[36mShop Load (0.2ms)[0m  [1m[34mSELECT "shops".* FROM "shops" WHERE "shops"."account_id" = $1[0m  [["account_id", 11]]
+Completed 200 OK in 2ms (Views: 1.3ms | ActiveRecord: 0.4ms)
+  [1m[35m (0.3ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.6ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.3ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (0.3ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mAccount Create (0.4ms)[0m  [1m[32mINSERT INTO "accounts" ("created_at", "updated_at") VALUES ($1, $2) RETURNING "id"[0m  [["created_at", "2018-08-25 16:47:46.567248"], ["updated_at", "2018-08-25 16:47:46.567248"]]
+  [1m[35m (0.1ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+Started GET "/api/v1/accounts/12/shops" for 127.0.0.1 at 2018-08-25 19:47:46 +0300
+Processing by Api::V1::ShopsController#index as HTML
+  Parameters: {"account_id"=>"12"}
+  [1m[36mAccount Load (0.5ms)[0m  [1m[34mSELECT  "accounts".* FROM "accounts" WHERE "accounts"."id" = $1 LIMIT $2[0m  [["id", 12], ["LIMIT", 1]]
+  [1m[36mShop Load (0.3ms)[0m  [1m[34mSELECT "shops".* FROM "shops" WHERE "shops"."account_id" = $1[0m  [["account_id", 12]]
+Completed 200 OK in 22ms (Views: 4.1ms | ActiveRecord: 2.4ms)
+  [1m[35m (0.3ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mShop Exists (0.5ms)[0m  [1m[34mSELECT  1 AS one FROM "shops" WHERE "shops"."name" = $1 AND "shops"."account_id" = $2 LIMIT $3[0m  [["name", "CooP"], ["account_id", 12], ["LIMIT", 1]]
+  [1m[36mShop Create (0.6ms)[0m  [1m[32mINSERT INTO "shops" ("account_id", "name", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "id"[0m  [["account_id", 12], ["name", "CooP"], ["created_at", "2018-08-25 16:47:46.622314"], ["updated_at", "2018-08-25 16:47:46.622314"]]
+  [1m[35m (0.2ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+Started GET "/api/v1/accounts/12/shops" for 127.0.0.1 at 2018-08-25 19:47:46 +0300
+Processing by Api::V1::ShopsController#index as HTML
+  Parameters: {"account_id"=>"12"}
+  [1m[36mAccount Load (0.3ms)[0m  [1m[34mSELECT  "accounts".* FROM "accounts" WHERE "accounts"."id" = $1 LIMIT $2[0m  [["id", 12], ["LIMIT", 1]]
+  [1m[36mShop Load (0.3ms)[0m  [1m[34mSELECT "shops".* FROM "shops" WHERE "shops"."account_id" = $1[0m  [["account_id", 12]]
+Completed 200 OK in 3ms (Views: 1.5ms | ActiveRecord: 0.7ms)
+  [1m[35m (0.2ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.6ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.3ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (0.2ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mAccount Create (0.5ms)[0m  [1m[32mINSERT INTO "accounts" ("created_at", "updated_at") VALUES ($1, $2) RETURNING "id"[0m  [["created_at", "2018-08-25 16:50:07.409927"], ["updated_at", "2018-08-25 16:50:07.409927"]]
+  [1m[35m (0.2ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+Started GET "/api/v1/accounts/13/shops" for 127.0.0.1 at 2018-08-25 19:50:07 +0300
+Processing by Api::V1::ShopsController#index as HTML
+  Parameters: {"account_id"=>"13"}
+  [1m[36mAccount Load (0.3ms)[0m  [1m[34mSELECT  "accounts".* FROM "accounts" WHERE "accounts"."id" = $1 LIMIT $2[0m  [["id", 13], ["LIMIT", 1]]
+  [1m[36mShop Load (0.4ms)[0m  [1m[34mSELECT "shops".* FROM "shops" WHERE "shops"."account_id" = $1[0m  [["account_id", 13]]
+Completed 200 OK in 18ms (Views: 3.9ms | ActiveRecord: 2.3ms)
+  [1m[35m (0.3ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mShop Exists (0.5ms)[0m  [1m[34mSELECT  1 AS one FROM "shops" WHERE "shops"."name" = $1 AND "shops"."account_id" = $2 LIMIT $3[0m  [["name", "CooP"], ["account_id", 13], ["LIMIT", 1]]
+  [1m[36mShop Create (0.6ms)[0m  [1m[32mINSERT INTO "shops" ("account_id", "name", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "id"[0m  [["account_id", 13], ["name", "CooP"], ["created_at", "2018-08-25 16:50:07.453531"], ["updated_at", "2018-08-25 16:50:07.453531"]]
+  [1m[35m (0.2ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+Started GET "/api/v1/accounts/13/shops" for 127.0.0.1 at 2018-08-25 19:50:07 +0300
+Processing by Api::V1::ShopsController#index as HTML
+  Parameters: {"account_id"=>"13"}
+  [1m[36mAccount Load (0.3ms)[0m  [1m[34mSELECT  "accounts".* FROM "accounts" WHERE "accounts"."id" = $1 LIMIT $2[0m  [["id", 13], ["LIMIT", 1]]
+  [1m[36mShop Load (0.3ms)[0m  [1m[34mSELECT "shops".* FROM "shops" WHERE "shops"."account_id" = $1[0m  [["account_id", 13]]
+Completed 200 OK in 3ms (Views: 1.4ms | ActiveRecord: 0.7ms)
+  [1m[35m (0.3ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (0.2ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mAccount Create (0.4ms)[0m  [1m[32mINSERT INTO "accounts" ("created_at", "updated_at") VALUES ($1, $2) RETURNING "id"[0m  [["created_at", "2018-08-25 16:50:07.464200"], ["updated_at", "2018-08-25 16:50:07.464200"]]
+  [1m[35m (0.2ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mShop Exists (0.3ms)[0m  [1m[34mSELECT  1 AS one FROM "shops" WHERE "shops"."name" = $1 AND "shops"."account_id" = $2 LIMIT $3[0m  [["name", "CooP"], ["account_id", 14], ["LIMIT", 1]]
+  [1m[36mShop Create (0.3ms)[0m  [1m[32mINSERT INTO "shops" ("account_id", "name", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "id"[0m  [["account_id", 14], ["name", "CooP"], ["created_at", "2018-08-25 16:50:07.468010"], ["updated_at", "2018-08-25 16:50:07.468010"]]
+  [1m[35m (0.2ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mAccount Create (0.4ms)[0m  [1m[32mINSERT INTO "accounts" ("created_at", "updated_at") VALUES ($1, $2) RETURNING "id"[0m  [["created_at", "2018-08-25 16:50:07.470380"], ["updated_at", "2018-08-25 16:50:07.470380"]]
+  [1m[35m (0.1ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+Started GET "/api/v1/accounts/15/shops" for 127.0.0.1 at 2018-08-25 19:50:07 +0300
+Processing by Api::V1::ShopsController#index as HTML
+  Parameters: {"account_id"=>"15"}
+  [1m[36mAccount Load (0.3ms)[0m  [1m[34mSELECT  "accounts".* FROM "accounts" WHERE "accounts"."id" = $1 LIMIT $2[0m  [["id", 15], ["LIMIT", 1]]
+  [1m[36mShop Load (0.3ms)[0m  [1m[34mSELECT "shops".* FROM "shops" WHERE "shops"."account_id" = $1[0m  [["account_id", 15]]
+Completed 200 OK in 2ms (Views: 0.9ms | ActiveRecord: 0.6ms)
+  [1m[35m (0.2ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.5ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (0.1ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mAccount Create (0.4ms)[0m  [1m[32mINSERT INTO "accounts" ("created_at", "updated_at") VALUES ($1, $2) RETURNING "id"[0m  [["created_at", "2018-08-25 16:50:31.297181"], ["updated_at", "2018-08-25 16:50:31.297181"]]
+  [1m[35m (0.1ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+Started GET "/api/v1/accounts/16/shops" for 127.0.0.1 at 2018-08-25 19:50:31 +0300
+Processing by Api::V1::ShopsController#index as HTML
+  Parameters: {"account_id"=>"16"}
+  [1m[36mAccount Load (0.2ms)[0m  [1m[34mSELECT  "accounts".* FROM "accounts" WHERE "accounts"."id" = $1 LIMIT $2[0m  [["id", 16], ["LIMIT", 1]]
+  [1m[36mShop Load (0.2ms)[0m  [1m[34mSELECT "shops".* FROM "shops" WHERE "shops"."account_id" = $1[0m  [["account_id", 16]]
+Completed 200 OK in 17ms (Views: 3.6ms | ActiveRecord: 1.8ms)
+  [1m[35m (0.1ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mShop Exists (0.4ms)[0m  [1m[34mSELECT  1 AS one FROM "shops" WHERE "shops"."name" = $1 AND "shops"."account_id" = $2 LIMIT $3[0m  [["name", "CooP"], ["account_id", 16], ["LIMIT", 1]]
+  [1m[36mShop Create (0.5ms)[0m  [1m[32mINSERT INTO "shops" ("account_id", "name", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "id"[0m  [["account_id", 16], ["name", "CooP"], ["created_at", "2018-08-25 16:50:31.338969"], ["updated_at", "2018-08-25 16:50:31.338969"]]
+  [1m[35m (0.1ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+Started GET "/api/v1/accounts/16/shops" for 127.0.0.1 at 2018-08-25 19:50:31 +0300
+Processing by Api::V1::ShopsController#index as HTML
+  Parameters: {"account_id"=>"16"}
+  [1m[36mAccount Load (0.2ms)[0m  [1m[34mSELECT  "accounts".* FROM "accounts" WHERE "accounts"."id" = $1 LIMIT $2[0m  [["id", 16], ["LIMIT", 1]]
+  [1m[36mShop Load (0.2ms)[0m  [1m[34mSELECT "shops".* FROM "shops" WHERE "shops"."account_id" = $1[0m  [["account_id", 16]]
+Completed 200 OK in 3ms (Views: 1.4ms | ActiveRecord: 0.4ms)
+  [1m[35m (0.2ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (0.1ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mAccount Create (0.2ms)[0m  [1m[32mINSERT INTO "accounts" ("created_at", "updated_at") VALUES ($1, $2) RETURNING "id"[0m  [["created_at", "2018-08-25 16:50:31.348398"], ["updated_at", "2018-08-25 16:50:31.348398"]]
+  [1m[35m (0.1ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mShop Exists (0.2ms)[0m  [1m[34mSELECT  1 AS one FROM "shops" WHERE "shops"."name" = $1 AND "shops"."account_id" = $2 LIMIT $3[0m  [["name", "CooP"], ["account_id", 17], ["LIMIT", 1]]
+  [1m[36mShop Create (0.3ms)[0m  [1m[32mINSERT INTO "shops" ("account_id", "name", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "id"[0m  [["account_id", 17], ["name", "CooP"], ["created_at", "2018-08-25 16:50:31.351628"], ["updated_at", "2018-08-25 16:50:31.351628"]]
+  [1m[35m (0.1ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mAccount Create (0.2ms)[0m  [1m[32mINSERT INTO "accounts" ("created_at", "updated_at") VALUES ($1, $2) RETURNING "id"[0m  [["created_at", "2018-08-25 16:50:31.353730"], ["updated_at", "2018-08-25 16:50:31.353730"]]
+  [1m[35m (0.1ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+Started GET "/api/v1/accounts/18/shops" for 127.0.0.1 at 2018-08-25 19:50:31 +0300
+Processing by Api::V1::ShopsController#index as HTML
+  Parameters: {"account_id"=>"18"}
+  [1m[36mAccount Load (0.2ms)[0m  [1m[34mSELECT  "accounts".* FROM "accounts" WHERE "accounts"."id" = $1 LIMIT $2[0m  [["id", 18], ["LIMIT", 1]]
+  [1m[36mShop Load (0.3ms)[0m  [1m[34mSELECT "shops".* FROM "shops" WHERE "shops"."account_id" = $1[0m  [["account_id", 18]]
+Completed 200 OK in 2ms (Views: 1.1ms | ActiveRecord: 0.6ms)
+  [1m[35m (0.2ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.5ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (0.1ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mAccount Create (0.4ms)[0m  [1m[32mINSERT INTO "accounts" ("created_at", "updated_at") VALUES ($1, $2) RETURNING "id"[0m  [["created_at", "2018-08-25 16:52:00.313265"], ["updated_at", "2018-08-25 16:52:00.313265"]]
+  [1m[35m (0.1ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+Started GET "/api/v1/accounts/19/shops" for 127.0.0.1 at 2018-08-25 19:52:00 +0300
+Processing by Api::V1::ShopsController#index as HTML
+  Parameters: {"account_id"=>"19"}
+  [1m[36mAccount Load (0.2ms)[0m  [1m[34mSELECT  "accounts".* FROM "accounts" WHERE "accounts"."id" = $1 LIMIT $2[0m  [["id", 19], ["LIMIT", 1]]
+  [1m[36mShop Load (0.3ms)[0m  [1m[34mSELECT "shops".* FROM "shops" WHERE "shops"."account_id" = $1[0m  [["account_id", 19]]
+Completed 200 OK in 17ms (Views: 3.7ms | ActiveRecord: 1.8ms)
+  [1m[35m (0.1ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mShop Exists (0.4ms)[0m  [1m[34mSELECT  1 AS one FROM "shops" WHERE "shops"."name" = $1 AND "shops"."account_id" = $2 LIMIT $3[0m  [["name", "CooP"], ["account_id", 19], ["LIMIT", 1]]
+  [1m[36mShop Create (0.5ms)[0m  [1m[32mINSERT INTO "shops" ("account_id", "name", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "id"[0m  [["account_id", 19], ["name", "CooP"], ["created_at", "2018-08-25 16:52:00.355340"], ["updated_at", "2018-08-25 16:52:00.355340"]]
+  [1m[35m (0.1ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+Started GET "/api/v1/accounts/19/shops" for 127.0.0.1 at 2018-08-25 19:52:00 +0300
+Processing by Api::V1::ShopsController#index as HTML
+  Parameters: {"account_id"=>"19"}
+  [1m[36mAccount Load (0.2ms)[0m  [1m[34mSELECT  "accounts".* FROM "accounts" WHERE "accounts"."id" = $1 LIMIT $2[0m  [["id", 19], ["LIMIT", 1]]
+  [1m[36mShop Load (0.2ms)[0m  [1m[34mSELECT "shops".* FROM "shops" WHERE "shops"."account_id" = $1[0m  [["account_id", 19]]
+Completed 200 OK in 3ms (Views: 1.4ms | ActiveRecord: 0.4ms)
+  [1m[35m (0.2ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (0.2ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mAccount Create (0.4ms)[0m  [1m[32mINSERT INTO "accounts" ("created_at", "updated_at") VALUES ($1, $2) RETURNING "id"[0m  [["created_at", "2018-08-25 16:52:00.365421"], ["updated_at", "2018-08-25 16:52:00.365421"]]
+  [1m[35m (0.2ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mShop Exists (0.4ms)[0m  [1m[34mSELECT  1 AS one FROM "shops" WHERE "shops"."name" = $1 AND "shops"."account_id" = $2 LIMIT $3[0m  [["name", "CooP"], ["account_id", 20], ["LIMIT", 1]]
+  [1m[36mShop Create (0.4ms)[0m  [1m[32mINSERT INTO "shops" ("account_id", "name", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "id"[0m  [["account_id", 20], ["name", "CooP"], ["created_at", "2018-08-25 16:52:00.369331"], ["updated_at", "2018-08-25 16:52:00.369331"]]
+  [1m[35m (0.2ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mAccount Create (0.4ms)[0m  [1m[32mINSERT INTO "accounts" ("created_at", "updated_at") VALUES ($1, $2) RETURNING "id"[0m  [["created_at", "2018-08-25 16:52:00.371749"], ["updated_at", "2018-08-25 16:52:00.371749"]]
+  [1m[35m (0.2ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+Started GET "/api/v1/accounts/21/shops" for 127.0.0.1 at 2018-08-25 19:52:00 +0300
+Processing by Api::V1::ShopsController#index as HTML
+  Parameters: {"account_id"=>"21"}
+  [1m[36mAccount Load (0.3ms)[0m  [1m[34mSELECT  "accounts".* FROM "accounts" WHERE "accounts"."id" = $1 LIMIT $2[0m  [["id", 21], ["LIMIT", 1]]
+  [1m[36mShop Load (0.3ms)[0m  [1m[34mSELECT "shops".* FROM "shops" WHERE "shops"."account_id" = $1[0m  [["account_id", 21]]
+Completed 200 OK in 2ms (Views: 0.9ms | ActiveRecord: 0.7ms)
+  [1m[35m (0.2ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (0.2ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mAccount Create (0.4ms)[0m  [1m[32mINSERT INTO "accounts" ("created_at", "updated_at") VALUES ($1, $2) RETURNING "id"[0m  [["created_at", "2018-08-25 16:52:00.380156"], ["updated_at", "2018-08-25 16:52:00.380156"]]
+  [1m[35m (0.2ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mShop Exists (0.4ms)[0m  [1m[34mSELECT  1 AS one FROM "shops" WHERE "shops"."name" = $1 AND "shops"."account_id" = $2 LIMIT $3[0m  [["name", "CooP"], ["account_id", 22], ["LIMIT", 1]]
+  [1m[36mShop Create (0.4ms)[0m  [1m[32mINSERT INTO "shops" ("account_id", "name", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "id"[0m  [["account_id", 22], ["name", "CooP"], ["created_at", "2018-08-25 16:52:00.383993"], ["updated_at", "2018-08-25 16:52:00.383993"]]
+  [1m[35m (0.2ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.5ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (0.2ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mAccount Create (0.5ms)[0m  [1m[32mINSERT INTO "accounts" ("created_at", "updated_at") VALUES ($1, $2) RETURNING "id"[0m  [["created_at", "2018-08-25 16:52:21.007626"], ["updated_at", "2018-08-25 16:52:21.007626"]]
+  [1m[35m (0.2ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+Started GET "/api/v1/accounts/23/shops" for 127.0.0.1 at 2018-08-25 19:52:21 +0300
+Processing by Api::V1::ShopsController#index as HTML
+  Parameters: {"account_id"=>"23"}
+  [1m[36mAccount Load (0.4ms)[0m  [1m[34mSELECT  "accounts".* FROM "accounts" WHERE "accounts"."id" = $1 LIMIT $2[0m  [["id", 23], ["LIMIT", 1]]
+  [1m[36mShop Load (0.4ms)[0m  [1m[34mSELECT "shops".* FROM "shops" WHERE "shops"."account_id" = $1[0m  [["account_id", 23]]
+Completed 200 OK in 18ms (Views: 3.8ms | ActiveRecord: 2.4ms)
+  [1m[35m (0.3ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mShop Exists (0.5ms)[0m  [1m[34mSELECT  1 AS one FROM "shops" WHERE "shops"."name" = $1 AND "shops"."account_id" = $2 LIMIT $3[0m  [["name", "CooP"], ["account_id", 23], ["LIMIT", 1]]
+  [1m[36mShop Create (0.6ms)[0m  [1m[32mINSERT INTO "shops" ("account_id", "name", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "id"[0m  [["account_id", 23], ["name", "CooP"], ["created_at", "2018-08-25 16:52:21.051423"], ["updated_at", "2018-08-25 16:52:21.051423"]]
+  [1m[35m (0.2ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+Started GET "/api/v1/accounts/23/shops" for 127.0.0.1 at 2018-08-25 19:52:21 +0300
+Processing by Api::V1::ShopsController#index as HTML
+  Parameters: {"account_id"=>"23"}
+  [1m[36mAccount Load (0.3ms)[0m  [1m[34mSELECT  "accounts".* FROM "accounts" WHERE "accounts"."id" = $1 LIMIT $2[0m  [["id", 23], ["LIMIT", 1]]
+  [1m[36mShop Load (0.3ms)[0m  [1m[34mSELECT "shops".* FROM "shops" WHERE "shops"."account_id" = $1[0m  [["account_id", 23]]
+Completed 200 OK in 3ms (Views: 1.4ms | ActiveRecord: 0.7ms)
+  [1m[35m (0.2ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (0.2ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mAccount Create (0.3ms)[0m  [1m[32mINSERT INTO "accounts" ("created_at", "updated_at") VALUES ($1, $2) RETURNING "id"[0m  [["created_at", "2018-08-25 16:52:21.062012"], ["updated_at", "2018-08-25 16:52:21.062012"]]
+  [1m[35m (0.2ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mShop Exists (0.3ms)[0m  [1m[34mSELECT  1 AS one FROM "shops" WHERE "shops"."name" = $1 AND "shops"."account_id" = $2 LIMIT $3[0m  [["name", "CooP"], ["account_id", 24], ["LIMIT", 1]]
+  [1m[36mShop Create (0.3ms)[0m  [1m[32mINSERT INTO "shops" ("account_id", "name", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "id"[0m  [["account_id", 24], ["name", "CooP"], ["created_at", "2018-08-25 16:52:21.065735"], ["updated_at", "2018-08-25 16:52:21.065735"]]
+  [1m[35m (0.2ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mAccount Create (0.3ms)[0m  [1m[32mINSERT INTO "accounts" ("created_at", "updated_at") VALUES ($1, $2) RETURNING "id"[0m  [["created_at", "2018-08-25 16:52:21.067975"], ["updated_at", "2018-08-25 16:52:21.067975"]]
+  [1m[35m (0.2ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+Started GET "/api/v1/accounts/25/shops" for 127.0.0.1 at 2018-08-25 19:52:21 +0300
+Processing by Api::V1::ShopsController#index as HTML
+  Parameters: {"account_id"=>"25"}
+  [1m[36mAccount Load (0.2ms)[0m  [1m[34mSELECT  "accounts".* FROM "accounts" WHERE "accounts"."id" = $1 LIMIT $2[0m  [["id", 25], ["LIMIT", 1]]
+  [1m[36mShop Load (0.2ms)[0m  [1m[34mSELECT "shops".* FROM "shops" WHERE "shops"."account_id" = $1[0m  [["account_id", 25]]
+Completed 200 OK in 2ms (Views: 0.8ms | ActiveRecord: 0.5ms)
+  [1m[35m (0.2ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (0.1ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mAccount Create (0.3ms)[0m  [1m[32mINSERT INTO "accounts" ("created_at", "updated_at") VALUES ($1, $2) RETURNING "id"[0m  [["created_at", "2018-08-25 16:52:21.075707"], ["updated_at", "2018-08-25 16:52:21.075707"]]
+  [1m[35m (0.1ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mShop Exists (0.3ms)[0m  [1m[34mSELECT  1 AS one FROM "shops" WHERE "shops"."name" = $1 AND "shops"."account_id" = $2 LIMIT $3[0m  [["name", "CooP"], ["account_id", 26], ["LIMIT", 1]]
+  [1m[36mShop Create (0.4ms)[0m  [1m[32mINSERT INTO "shops" ("account_id", "name", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "id"[0m  [["account_id", 26], ["name", "CooP"], ["created_at", "2018-08-25 16:52:21.079061"], ["updated_at", "2018-08-25 16:52:21.079061"]]
+  [1m[35m (0.2ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+Started GET "/api/v1/accounts/26/shops/13" for 127.0.0.1 at 2018-08-25 19:52:21 +0300
+Processing by Api::V1::ShopsController#show as HTML
+  Parameters: {"account_id"=>"26", "id"=>"13"}
+  [1m[36mAccount Load (0.4ms)[0m  [1m[34mSELECT  "accounts".* FROM "accounts" WHERE "accounts"."id" = $1 LIMIT $2[0m  [["id", 26], ["LIMIT", 1]]
+  [1m[36mShop Load (0.4ms)[0m  [1m[34mSELECT  "shops".* FROM "shops" WHERE "shops"."account_id" = $1 AND "shops"."id" = $2 LIMIT $3[0m  [["account_id", 26], ["id", 13], ["LIMIT", 1]]
+Completed 200 OK in 3ms (Views: 0.4ms | ActiveRecord: 0.8ms)
+  [1m[35m (0.3ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.5ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (0.1ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mAccount Create (0.4ms)[0m  [1m[32mINSERT INTO "accounts" ("created_at", "updated_at") VALUES ($1, $2) RETURNING "id"[0m  [["created_at", "2018-08-25 16:53:52.516719"], ["updated_at", "2018-08-25 16:53:52.516719"]]
+  [1m[35m (0.1ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+Started GET "/api/v1/accounts/27/shops" for 127.0.0.1 at 2018-08-25 19:53:52 +0300
+Processing by Api::V1::ShopsController#index as HTML
+  Parameters: {"account_id"=>"27"}
+  [1m[36mAccount Load (0.2ms)[0m  [1m[34mSELECT  "accounts".* FROM "accounts" WHERE "accounts"."id" = $1 LIMIT $2[0m  [["id", 27], ["LIMIT", 1]]
+  [1m[36mShop Load (0.3ms)[0m  [1m[34mSELECT "shops".* FROM "shops" WHERE "shops"."account_id" = $1[0m  [["account_id", 27]]
+Completed 200 OK in 17ms (Views: 3.6ms | ActiveRecord: 1.8ms)
+  [1m[35m (0.1ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mShop Exists (0.4ms)[0m  [1m[34mSELECT  1 AS one FROM "shops" WHERE "shops"."name" = $1 AND "shops"."account_id" = $2 LIMIT $3[0m  [["name", "CooP"], ["account_id", 27], ["LIMIT", 1]]
+  [1m[36mShop Create (0.5ms)[0m  [1m[32mINSERT INTO "shops" ("account_id", "name", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "id"[0m  [["account_id", 27], ["name", "CooP"], ["created_at", "2018-08-25 16:53:52.558685"], ["updated_at", "2018-08-25 16:53:52.558685"]]
+  [1m[35m (0.1ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+Started GET "/api/v1/accounts/27/shops" for 127.0.0.1 at 2018-08-25 19:53:52 +0300
+Processing by Api::V1::ShopsController#index as HTML
+  Parameters: {"account_id"=>"27"}
+  [1m[36mAccount Load (0.2ms)[0m  [1m[34mSELECT  "accounts".* FROM "accounts" WHERE "accounts"."id" = $1 LIMIT $2[0m  [["id", 27], ["LIMIT", 1]]
+  [1m[36mShop Load (0.2ms)[0m  [1m[34mSELECT "shops".* FROM "shops" WHERE "shops"."account_id" = $1[0m  [["account_id", 27]]
+Completed 200 OK in 3ms (Views: 1.4ms | ActiveRecord: 0.4ms)
+  [1m[35m (0.2ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (0.1ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mAccount Create (0.2ms)[0m  [1m[32mINSERT INTO "accounts" ("created_at", "updated_at") VALUES ($1, $2) RETURNING "id"[0m  [["created_at", "2018-08-25 16:53:52.568164"], ["updated_at", "2018-08-25 16:53:52.568164"]]
+  [1m[35m (0.1ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mShop Exists (0.2ms)[0m  [1m[34mSELECT  1 AS one FROM "shops" WHERE "shops"."name" = $1 AND "shops"."account_id" = $2 LIMIT $3[0m  [["name", "CooP"], ["account_id", 28], ["LIMIT", 1]]
+  [1m[36mShop Create (0.3ms)[0m  [1m[32mINSERT INTO "shops" ("account_id", "name", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "id"[0m  [["account_id", 28], ["name", "CooP"], ["created_at", "2018-08-25 16:53:52.571368"], ["updated_at", "2018-08-25 16:53:52.571368"]]
+  [1m[35m (0.1ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mAccount Create (0.2ms)[0m  [1m[32mINSERT INTO "accounts" ("created_at", "updated_at") VALUES ($1, $2) RETURNING "id"[0m  [["created_at", "2018-08-25 16:53:52.573494"], ["updated_at", "2018-08-25 16:53:52.573494"]]
+  [1m[35m (0.1ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+Started GET "/api/v1/accounts/29/shops" for 127.0.0.1 at 2018-08-25 19:53:52 +0300
+Processing by Api::V1::ShopsController#index as HTML
+  Parameters: {"account_id"=>"29"}
+  [1m[36mAccount Load (0.2ms)[0m  [1m[34mSELECT  "accounts".* FROM "accounts" WHERE "accounts"."id" = $1 LIMIT $2[0m  [["id", 29], ["LIMIT", 1]]
+  [1m[36mShop Load (0.2ms)[0m  [1m[34mSELECT "shops".* FROM "shops" WHERE "shops"."account_id" = $1[0m  [["account_id", 29]]
+Completed 200 OK in 2ms (Views: 0.9ms | ActiveRecord: 0.4ms)
+  [1m[35m (0.1ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (0.1ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mAccount Create (0.2ms)[0m  [1m[32mINSERT INTO "accounts" ("created_at", "updated_at") VALUES ($1, $2) RETURNING "id"[0m  [["created_at", "2018-08-25 16:53:52.580542"], ["updated_at", "2018-08-25 16:53:52.580542"]]
+  [1m[35m (0.1ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mShop Exists (0.3ms)[0m  [1m[34mSELECT  1 AS one FROM "shops" WHERE "shops"."name" = $1 AND "shops"."account_id" = $2 LIMIT $3[0m  [["name", "CooP"], ["account_id", 30], ["LIMIT", 1]]
+  [1m[36mShop Create (0.3ms)[0m  [1m[32mINSERT INTO "shops" ("account_id", "name", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "id"[0m  [["account_id", 30], ["name", "CooP"], ["created_at", "2018-08-25 16:53:52.583750"], ["updated_at", "2018-08-25 16:53:52.583750"]]
+  [1m[35m (0.1ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+Started GET "/api/v1/accounts/30/shops/16" for 127.0.0.1 at 2018-08-25 19:53:52 +0300
+Processing by Api::V1::ShopsController#show as HTML
+  Parameters: {"account_id"=>"30", "id"=>"16"}
+  [1m[36mAccount Load (0.2ms)[0m  [1m[34mSELECT  "accounts".* FROM "accounts" WHERE "accounts"."id" = $1 LIMIT $2[0m  [["id", 30], ["LIMIT", 1]]
+  [1m[36mShop Load (0.3ms)[0m  [1m[34mSELECT  "shops".* FROM "shops" WHERE "shops"."account_id" = $1 AND "shops"."id" = $2 LIMIT $3[0m  [["account_id", 30], ["id", 16], ["LIMIT", 1]]
+Completed 200 OK in 3ms (Views: 0.4ms | ActiveRecord: 0.5ms)
+  [1m[35m (0.1ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mAccount Create (0.2ms)[0m  [1m[32mINSERT INTO "accounts" ("created_at", "updated_at") VALUES ($1, $2) RETURNING "id"[0m  [["created_at", "2018-08-25 16:53:52.590685"], ["updated_at", "2018-08-25 16:53:52.590685"]]
+  [1m[35m (0.1ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mShop Exists (0.3ms)[0m  [1m[34mSELECT  1 AS one FROM "shops" WHERE "shops"."name" = $1 AND "shops"."account_id" = $2 LIMIT $3[0m  [["name", "CooP"], ["account_id", 31], ["LIMIT", 1]]
+  [1m[36mShop Create (0.5ms)[0m  [1m[32mINSERT INTO "shops" ("account_id", "name", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "id"[0m  [["account_id", 31], ["name", "CooP"], ["created_at", "2018-08-25 16:53:52.594140"], ["updated_at", "2018-08-25 16:53:52.594140"]]
+  [1m[35m (0.6ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+Started GET "/api/v1/accounts/30/shops/17" for 127.0.0.1 at 2018-08-25 19:53:52 +0300
+Processing by Api::V1::ShopsController#show as HTML
+  Parameters: {"account_id"=>"30", "id"=>"17"}
+  [1m[36mAccount Load (0.3ms)[0m  [1m[34mSELECT  "accounts".* FROM "accounts" WHERE "accounts"."id" = $1 LIMIT $2[0m  [["id", 30], ["LIMIT", 1]]
+  [1m[36mShop Load (0.4ms)[0m  [1m[34mSELECT  "shops".* FROM "shops" WHERE "shops"."account_id" = $1 AND "shops"."id" = $2 LIMIT $3[0m  [["account_id", 30], ["id", 17], ["LIMIT", 1]]
+Completed 404 Not Found in 3ms (ActiveRecord: 0.8ms)
+  [1m[35m (0.3ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.6ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.3ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (0.3ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mAccount Create (0.5ms)[0m  [1m[32mINSERT INTO "accounts" ("created_at", "updated_at") VALUES ($1, $2) RETURNING "id"[0m  [["created_at", "2018-08-25 17:04:28.593698"], ["updated_at", "2018-08-25 17:04:28.593698"]]
+  [1m[35m (0.2ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+Started GET "/api/v1/accounts/32/shops" for 127.0.0.1 at 2018-08-25 20:04:28 +0300
+Processing by Api::V1::ShopsController#index as HTML
+  Parameters: {"account_id"=>"32"}
+  [1m[36mAccount Load (0.4ms)[0m  [1m[34mSELECT  "accounts".* FROM "accounts" WHERE "accounts"."id" = $1 LIMIT $2[0m  [["id", 32], ["LIMIT", 1]]
+  [1m[36mShop Load (0.4ms)[0m  [1m[34mSELECT "shops".* FROM "shops" WHERE "shops"."account_id" = $1[0m  [["account_id", 32]]
+Completed 200 OK in 18ms (Views: 3.7ms | ActiveRecord: 2.3ms)
+  [1m[35m (0.2ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mShop Exists (0.5ms)[0m  [1m[34mSELECT  1 AS one FROM "shops" WHERE "shops"."name" = $1 AND "shops"."account_id" = $2 LIMIT $3[0m  [["name", "CooP"], ["account_id", 32], ["LIMIT", 1]]
+  [1m[36mShop Create (0.6ms)[0m  [1m[32mINSERT INTO "shops" ("account_id", "name", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "id"[0m  [["account_id", 32], ["name", "CooP"], ["created_at", "2018-08-25 17:04:28.637474"], ["updated_at", "2018-08-25 17:04:28.637474"]]
+  [1m[35m (0.2ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+Started GET "/api/v1/accounts/32/shops" for 127.0.0.1 at 2018-08-25 20:04:28 +0300
+Processing by Api::V1::ShopsController#index as HTML
+  Parameters: {"account_id"=>"32"}
+  [1m[36mAccount Load (0.3ms)[0m  [1m[34mSELECT  "accounts".* FROM "accounts" WHERE "accounts"."id" = $1 LIMIT $2[0m  [["id", 32], ["LIMIT", 1]]
+  [1m[36mShop Load (0.3ms)[0m  [1m[34mSELECT "shops".* FROM "shops" WHERE "shops"."account_id" = $1[0m  [["account_id", 32]]
+Completed 200 OK in 3ms (Views: 1.4ms | ActiveRecord: 0.7ms)
+  [1m[35m (0.3ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (0.2ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mAccount Create (0.4ms)[0m  [1m[32mINSERT INTO "accounts" ("created_at", "updated_at") VALUES ($1, $2) RETURNING "id"[0m  [["created_at", "2018-08-25 17:04:28.648185"], ["updated_at", "2018-08-25 17:04:28.648185"]]
+  [1m[35m (0.2ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mShop Exists (0.3ms)[0m  [1m[34mSELECT  1 AS one FROM "shops" WHERE "shops"."name" = $1 AND "shops"."account_id" = $2 LIMIT $3[0m  [["name", "CooP"], ["account_id", 33], ["LIMIT", 1]]
+  [1m[36mShop Create (0.5ms)[0m  [1m[32mINSERT INTO "shops" ("account_id", "name", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "id"[0m  [["account_id", 33], ["name", "CooP"], ["created_at", "2018-08-25 17:04:28.652072"], ["updated_at", "2018-08-25 17:04:28.652072"]]
+  [1m[35m (0.2ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mAccount Create (0.4ms)[0m  [1m[32mINSERT INTO "accounts" ("created_at", "updated_at") VALUES ($1, $2) RETURNING "id"[0m  [["created_at", "2018-08-25 17:04:28.654567"], ["updated_at", "2018-08-25 17:04:28.654567"]]
+  [1m[35m (0.2ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+Started GET "/api/v1/accounts/34/shops" for 127.0.0.1 at 2018-08-25 20:04:28 +0300
+Processing by Api::V1::ShopsController#index as HTML
+  Parameters: {"account_id"=>"34"}
+  [1m[36mAccount Load (0.4ms)[0m  [1m[34mSELECT  "accounts".* FROM "accounts" WHERE "accounts"."id" = $1 LIMIT $2[0m  [["id", 34], ["LIMIT", 1]]
+  [1m[36mShop Load (0.3ms)[0m  [1m[34mSELECT "shops".* FROM "shops" WHERE "shops"."account_id" = $1[0m  [["account_id", 34]]
+Completed 200 OK in 2ms (Views: 0.8ms | ActiveRecord: 0.6ms)
+  [1m[35m (0.2ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (0.2ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mAccount Create (0.3ms)[0m  [1m[32mINSERT INTO "accounts" ("created_at", "updated_at") VALUES ($1, $2) RETURNING "id"[0m  [["created_at", "2018-08-25 17:04:28.662915"], ["updated_at", "2018-08-25 17:04:28.662915"]]
+  [1m[35m (0.2ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mShop Exists (0.3ms)[0m  [1m[34mSELECT  1 AS one FROM "shops" WHERE "shops"."name" = $1 AND "shops"."account_id" = $2 LIMIT $3[0m  [["name", "CooP"], ["account_id", 35], ["LIMIT", 1]]
+  [1m[36mShop Create (0.3ms)[0m  [1m[32mINSERT INTO "shops" ("account_id", "name", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "id"[0m  [["account_id", 35], ["name", "CooP"], ["created_at", "2018-08-25 17:04:28.666604"], ["updated_at", "2018-08-25 17:04:28.666604"]]
+  [1m[35m (0.2ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+Started GET "/api/v1/accounts/35/shops/20" for 127.0.0.1 at 2018-08-25 20:04:28 +0300
+Processing by Api::V1::ShopsController#show as HTML
+  Parameters: {"account_id"=>"35", "id"=>"20"}
+  [1m[36mAccount Load (0.4ms)[0m  [1m[34mSELECT  "accounts".* FROM "accounts" WHERE "accounts"."id" = $1 LIMIT $2[0m  [["id", 35], ["LIMIT", 1]]
+  [1m[36mShop Load (0.4ms)[0m  [1m[34mSELECT  "shops".* FROM "shops" WHERE "shops"."account_id" = $1 AND "shops"."id" = $2 LIMIT $3[0m  [["account_id", 35], ["id", 20], ["LIMIT", 1]]
+Completed 200 OK in 3ms (Views: 0.5ms | ActiveRecord: 0.7ms)
+  [1m[35m (0.2ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mAccount Create (0.4ms)[0m  [1m[32mINSERT INTO "accounts" ("created_at", "updated_at") VALUES ($1, $2) RETURNING "id"[0m  [["created_at", "2018-08-25 17:04:28.674619"], ["updated_at", "2018-08-25 17:04:28.674619"]]
+  [1m[35m (0.5ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mShop Exists (0.4ms)[0m  [1m[34mSELECT  1 AS one FROM "shops" WHERE "shops"."name" = $1 AND "shops"."account_id" = $2 LIMIT $3[0m  [["name", "CooP"], ["account_id", 36], ["LIMIT", 1]]
+  [1m[36mShop Create (0.5ms)[0m  [1m[32mINSERT INTO "shops" ("account_id", "name", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "id"[0m  [["account_id", 36], ["name", "CooP"], ["created_at", "2018-08-25 17:04:28.680110"], ["updated_at", "2018-08-25 17:04:28.680110"]]
+  [1m[35m (0.2ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+Started GET "/api/v1/accounts/35/shops/21" for 127.0.0.1 at 2018-08-25 20:04:28 +0300
+Processing by Api::V1::ShopsController#show as HTML
+  Parameters: {"account_id"=>"35", "id"=>"21"}
+  [1m[36mAccount Load (0.3ms)[0m  [1m[34mSELECT  "accounts".* FROM "accounts" WHERE "accounts"."id" = $1 LIMIT $2[0m  [["id", 35], ["LIMIT", 1]]
+  [1m[36mShop Load (0.4ms)[0m  [1m[34mSELECT  "shops".* FROM "shops" WHERE "shops"."account_id" = $1 AND "shops"."id" = $2 LIMIT $3[0m  [["account_id", 35], ["id", 21], ["LIMIT", 1]]
+Completed 200 OK in 3ms (Views: 0.1ms | ActiveRecord: 0.7ms)
+  [1m[35m (0.3ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.6ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.3ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (0.2ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mAccount Create (0.5ms)[0m  [1m[32mINSERT INTO "accounts" ("created_at", "updated_at") VALUES ($1, $2) RETURNING "id"[0m  [["created_at", "2018-08-25 17:07:36.201475"], ["updated_at", "2018-08-25 17:07:36.201475"]]
+  [1m[35m (0.2ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+Started GET "/api/v1/accounts/37/shops" for 127.0.0.1 at 2018-08-25 20:07:36 +0300
+Processing by Api::V1::ShopsController#index as HTML
+  Parameters: {"account_id"=>"37"}
+  [1m[36mAccount Load (0.4ms)[0m  [1m[34mSELECT  "accounts".* FROM "accounts" WHERE "accounts"."id" = $1 LIMIT $2[0m  [["id", 37], ["LIMIT", 1]]
+  [1m[36mShop Load (0.4ms)[0m  [1m[34mSELECT "shops".* FROM "shops" WHERE "shops"."account_id" = $1[0m  [["account_id", 37]]
+Completed 200 OK in 18ms (Views: 3.7ms | ActiveRecord: 2.4ms)
+  [1m[35m (0.3ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mShop Exists (0.5ms)[0m  [1m[34mSELECT  1 AS one FROM "shops" WHERE "shops"."name" = $1 AND "shops"."account_id" = $2 LIMIT $3[0m  [["name", "CooP"], ["account_id", 37], ["LIMIT", 1]]
+  [1m[36mShop Create (0.6ms)[0m  [1m[32mINSERT INTO "shops" ("account_id", "name", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "id"[0m  [["account_id", 37], ["name", "CooP"], ["created_at", "2018-08-25 17:07:36.245556"], ["updated_at", "2018-08-25 17:07:36.245556"]]
+  [1m[35m (0.2ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+Started GET "/api/v1/accounts/37/shops" for 127.0.0.1 at 2018-08-25 20:07:36 +0300
+Processing by Api::V1::ShopsController#index as HTML
+  Parameters: {"account_id"=>"37"}
+  [1m[36mAccount Load (0.3ms)[0m  [1m[34mSELECT  "accounts".* FROM "accounts" WHERE "accounts"."id" = $1 LIMIT $2[0m  [["id", 37], ["LIMIT", 1]]
+  [1m[36mShop Load (0.3ms)[0m  [1m[34mSELECT "shops".* FROM "shops" WHERE "shops"."account_id" = $1[0m  [["account_id", 37]]
+Completed 200 OK in 3ms (Views: 1.5ms | ActiveRecord: 0.6ms)
+  [1m[35m (0.3ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (0.1ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mAccount Create (0.4ms)[0m  [1m[32mINSERT INTO "accounts" ("created_at", "updated_at") VALUES ($1, $2) RETURNING "id"[0m  [["created_at", "2018-08-25 17:07:36.255960"], ["updated_at", "2018-08-25 17:07:36.255960"]]
+  [1m[35m (0.2ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mShop Exists (0.3ms)[0m  [1m[34mSELECT  1 AS one FROM "shops" WHERE "shops"."name" = $1 AND "shops"."account_id" = $2 LIMIT $3[0m  [["name", "CooP"], ["account_id", 38], ["LIMIT", 1]]
+  [1m[36mShop Create (0.3ms)[0m  [1m[32mINSERT INTO "shops" ("account_id", "name", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "id"[0m  [["account_id", 38], ["name", "CooP"], ["created_at", "2018-08-25 17:07:36.259769"], ["updated_at", "2018-08-25 17:07:36.259769"]]
+  [1m[35m (0.2ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mAccount Create (0.2ms)[0m  [1m[32mINSERT INTO "accounts" ("created_at", "updated_at") VALUES ($1, $2) RETURNING "id"[0m  [["created_at", "2018-08-25 17:07:36.262109"], ["updated_at", "2018-08-25 17:07:36.262109"]]
+  [1m[35m (0.2ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+Started GET "/api/v1/accounts/39/shops" for 127.0.0.1 at 2018-08-25 20:07:36 +0300
+Processing by Api::V1::ShopsController#index as HTML
+  Parameters: {"account_id"=>"39"}
+  [1m[36mAccount Load (0.3ms)[0m  [1m[34mSELECT  "accounts".* FROM "accounts" WHERE "accounts"."id" = $1 LIMIT $2[0m  [["id", 39], ["LIMIT", 1]]
+  [1m[36mShop Load (0.3ms)[0m  [1m[34mSELECT "shops".* FROM "shops" WHERE "shops"."account_id" = $1[0m  [["account_id", 39]]
+Completed 200 OK in 2ms (Views: 0.8ms | ActiveRecord: 0.6ms)
+  [1m[35m (0.2ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (0.2ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mAccount Create (0.3ms)[0m  [1m[32mINSERT INTO "accounts" ("created_at", "updated_at") VALUES ($1, $2) RETURNING "id"[0m  [["created_at", "2018-08-25 17:07:36.270061"], ["updated_at", "2018-08-25 17:07:36.270061"]]
+  [1m[35m (0.2ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mShop Exists (0.4ms)[0m  [1m[34mSELECT  1 AS one FROM "shops" WHERE "shops"."name" = $1 AND "shops"."account_id" = $2 LIMIT $3[0m  [["name", "CooP"], ["account_id", 40], ["LIMIT", 1]]
+  [1m[36mShop Create (0.4ms)[0m  [1m[32mINSERT INTO "shops" ("account_id", "name", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "id"[0m  [["account_id", 40], ["name", "CooP"], ["created_at", "2018-08-25 17:07:36.273665"], ["updated_at", "2018-08-25 17:07:36.273665"]]
+  [1m[35m (0.2ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+Started GET "/api/v1/accounts/40/shops/24" for 127.0.0.1 at 2018-08-25 20:07:36 +0300
+Processing by Api::V1::ShopsController#show as HTML
+  Parameters: {"account_id"=>"40", "id"=>"24"}
+  [1m[36mAccount Load (0.4ms)[0m  [1m[34mSELECT  "accounts".* FROM "accounts" WHERE "accounts"."id" = $1 LIMIT $2[0m  [["id", 40], ["LIMIT", 1]]
+  [1m[36mShop Load (0.4ms)[0m  [1m[34mSELECT  "shops".* FROM "shops" WHERE "shops"."account_id" = $1 AND "shops"."id" = $2 LIMIT $3[0m  [["account_id", 40], ["id", 24], ["LIMIT", 1]]
+Completed 200 OK in 3ms (Views: 0.5ms | ActiveRecord: 0.8ms)
+  [1m[35m (0.4ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mAccount Create (0.4ms)[0m  [1m[32mINSERT INTO "accounts" ("created_at", "updated_at") VALUES ($1, $2) RETURNING "id"[0m  [["created_at", "2018-08-25 17:07:36.281681"], ["updated_at", "2018-08-25 17:07:36.281681"]]
+  [1m[35m (0.1ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.7ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mShop Exists (0.4ms)[0m  [1m[34mSELECT  1 AS one FROM "shops" WHERE "shops"."name" = $1 AND "shops"."account_id" = $2 LIMIT $3[0m  [["name", "CooP"], ["account_id", 41], ["LIMIT", 1]]
+  [1m[36mShop Create (0.5ms)[0m  [1m[32mINSERT INTO "shops" ("account_id", "name", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "id"[0m  [["account_id", 41], ["name", "CooP"], ["created_at", "2018-08-25 17:07:36.287318"], ["updated_at", "2018-08-25 17:07:36.287318"]]
+  [1m[35m (0.2ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+Started GET "/api/v1/accounts/40/shops/25" for 127.0.0.1 at 2018-08-25 20:07:36 +0300
+Processing by Api::V1::ShopsController#show as HTML
+  Parameters: {"account_id"=>"40", "id"=>"25"}
+  [1m[36mAccount Load (0.3ms)[0m  [1m[34mSELECT  "accounts".* FROM "accounts" WHERE "accounts"."id" = $1 LIMIT $2[0m  [["id", 40], ["LIMIT", 1]]
+  [1m[36mShop Load (0.4ms)[0m  [1m[34mSELECT  "shops".* FROM "shops" WHERE "shops"."account_id" = $1 AND "shops"."id" = $2 LIMIT $3[0m  [["account_id", 40], ["id", 25], ["LIMIT", 1]]
+Completed 200 OK in 3ms (Views: 0.1ms | ActiveRecord: 0.7ms)
+  [1m[35m (0.3ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.5ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (0.1ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mAccount Create (0.4ms)[0m  [1m[32mINSERT INTO "accounts" ("created_at", "updated_at") VALUES ($1, $2) RETURNING "id"[0m  [["created_at", "2018-08-25 17:09:20.533613"], ["updated_at", "2018-08-25 17:09:20.533613"]]
+  [1m[35m (0.1ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+Started GET "/api/v1/accounts/42/shops" for 127.0.0.1 at 2018-08-25 20:09:20 +0300
+Processing by Api::V1::ShopsController#index as HTML
+  Parameters: {"account_id"=>"42"}
+  [1m[36mAccount Load (0.2ms)[0m  [1m[34mSELECT  "accounts".* FROM "accounts" WHERE "accounts"."id" = $1 LIMIT $2[0m  [["id", 42], ["LIMIT", 1]]
+  [1m[36mShop Load (0.3ms)[0m  [1m[34mSELECT "shops".* FROM "shops" WHERE "shops"."account_id" = $1[0m  [["account_id", 42]]
+Completed 200 OK in 17ms (Views: 3.6ms | ActiveRecord: 1.8ms)
+  [1m[35m (0.1ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mShop Exists (0.4ms)[0m  [1m[34mSELECT  1 AS one FROM "shops" WHERE "shops"."name" = $1 AND "shops"."account_id" = $2 LIMIT $3[0m  [["name", "CooP"], ["account_id", 42], ["LIMIT", 1]]
+  [1m[36mShop Create (0.7ms)[0m  [1m[32mINSERT INTO "shops" ("account_id", "name", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "id"[0m  [["account_id", 42], ["name", "CooP"], ["created_at", "2018-08-25 17:09:20.575525"], ["updated_at", "2018-08-25 17:09:20.575525"]]
+  [1m[35m (0.1ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+Started GET "/api/v1/accounts/42/shops" for 127.0.0.1 at 2018-08-25 20:09:20 +0300
+Processing by Api::V1::ShopsController#index as HTML
+  Parameters: {"account_id"=>"42"}
+  [1m[36mAccount Load (0.2ms)[0m  [1m[34mSELECT  "accounts".* FROM "accounts" WHERE "accounts"."id" = $1 LIMIT $2[0m  [["id", 42], ["LIMIT", 1]]
+  [1m[36mShop Load (0.2ms)[0m  [1m[34mSELECT "shops".* FROM "shops" WHERE "shops"."account_id" = $1[0m  [["account_id", 42]]
+Completed 200 OK in 3ms (Views: 1.4ms | ActiveRecord: 0.4ms)
+  [1m[35m (0.2ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (0.1ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mAccount Create (0.2ms)[0m  [1m[32mINSERT INTO "accounts" ("created_at", "updated_at") VALUES ($1, $2) RETURNING "id"[0m  [["created_at", "2018-08-25 17:09:20.585224"], ["updated_at", "2018-08-25 17:09:20.585224"]]
+  [1m[35m (0.1ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mShop Exists (0.2ms)[0m  [1m[34mSELECT  1 AS one FROM "shops" WHERE "shops"."name" = $1 AND "shops"."account_id" = $2 LIMIT $3[0m  [["name", "CooP"], ["account_id", 43], ["LIMIT", 1]]
+  [1m[36mShop Create (0.3ms)[0m  [1m[32mINSERT INTO "shops" ("account_id", "name", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "id"[0m  [["account_id", 43], ["name", "CooP"], ["created_at", "2018-08-25 17:09:20.588454"], ["updated_at", "2018-08-25 17:09:20.588454"]]
+  [1m[35m (0.1ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mAccount Create (0.2ms)[0m  [1m[32mINSERT INTO "accounts" ("created_at", "updated_at") VALUES ($1, $2) RETURNING "id"[0m  [["created_at", "2018-08-25 17:09:20.590447"], ["updated_at", "2018-08-25 17:09:20.590447"]]
+  [1m[35m (0.1ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+Started GET "/api/v1/accounts/44/shops" for 127.0.0.1 at 2018-08-25 20:09:20 +0300
+Processing by Api::V1::ShopsController#index as HTML
+  Parameters: {"account_id"=>"44"}
+  [1m[36mAccount Load (0.2ms)[0m  [1m[34mSELECT  "accounts".* FROM "accounts" WHERE "accounts"."id" = $1 LIMIT $2[0m  [["id", 44], ["LIMIT", 1]]
+  [1m[36mShop Load (0.3ms)[0m  [1m[34mSELECT "shops".* FROM "shops" WHERE "shops"."account_id" = $1[0m  [["account_id", 44]]
+Completed 200 OK in 2ms (Views: 1.0ms | ActiveRecord: 0.6ms)
+  [1m[35m (0.2ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (0.1ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mAccount Create (0.3ms)[0m  [1m[32mINSERT INTO "accounts" ("created_at", "updated_at") VALUES ($1, $2) RETURNING "id"[0m  [["created_at", "2018-08-25 17:09:20.597998"], ["updated_at", "2018-08-25 17:09:20.597998"]]
+  [1m[35m (0.2ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mShop Exists (0.4ms)[0m  [1m[34mSELECT  1 AS one FROM "shops" WHERE "shops"."name" = $1 AND "shops"."account_id" = $2 LIMIT $3[0m  [["name", "CooP"], ["account_id", 45], ["LIMIT", 1]]
+  [1m[36mShop Create (0.4ms)[0m  [1m[32mINSERT INTO "shops" ("account_id", "name", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "id"[0m  [["account_id", 45], ["name", "CooP"], ["created_at", "2018-08-25 17:09:20.601765"], ["updated_at", "2018-08-25 17:09:20.601765"]]
+  [1m[35m (0.2ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+Started GET "/api/v1/accounts/45/shops/28" for 127.0.0.1 at 2018-08-25 20:09:20 +0300
+Processing by Api::V1::ShopsController#show as HTML
+  Parameters: {"account_id"=>"45", "id"=>"28"}
+  [1m[36mAccount Load (0.3ms)[0m  [1m[34mSELECT  "accounts".* FROM "accounts" WHERE "accounts"."id" = $1 LIMIT $2[0m  [["id", 45], ["LIMIT", 1]]
+  [1m[36mShop Load (0.4ms)[0m  [1m[34mSELECT  "shops".* FROM "shops" WHERE "shops"."account_id" = $1 AND "shops"."id" = $2 LIMIT $3[0m  [["account_id", 45], ["id", 28], ["LIMIT", 1]]
+Completed 200 OK in 3ms (Views: 0.5ms | ActiveRecord: 0.7ms)
+  [1m[35m (0.3ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mAccount Create (0.5ms)[0m  [1m[32mINSERT INTO "accounts" ("created_at", "updated_at") VALUES ($1, $2) RETURNING "id"[0m  [["created_at", "2018-08-25 17:09:20.609418"], ["updated_at", "2018-08-25 17:09:20.609418"]]
+  [1m[35m (0.3ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mShop Exists (1.1ms)[0m  [1m[34mSELECT  1 AS one FROM "shops" WHERE "shops"."name" = $1 AND "shops"."account_id" = $2 LIMIT $3[0m  [["name", "CooP"], ["account_id", 46], ["LIMIT", 1]]
+  [1m[36mShop Create (0.5ms)[0m  [1m[32mINSERT INTO "shops" ("account_id", "name", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "id"[0m  [["account_id", 46], ["name", "CooP"], ["created_at", "2018-08-25 17:09:20.615164"], ["updated_at", "2018-08-25 17:09:20.615164"]]
+  [1m[35m (0.2ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+Started GET "/api/v1/accounts/45/shops/29" for 127.0.0.1 at 2018-08-25 20:09:20 +0300
+Processing by Api::V1::ShopsController#show as HTML
+  Parameters: {"account_id"=>"45", "id"=>"29"}
+  [1m[36mAccount Load (0.3ms)[0m  [1m[34mSELECT  "accounts".* FROM "accounts" WHERE "accounts"."id" = $1 LIMIT $2[0m  [["id", 45], ["LIMIT", 1]]
+  [1m[36mShop Load (0.3ms)[0m  [1m[34mSELECT  "shops".* FROM "shops" WHERE "shops"."account_id" = $1 AND "shops"."id" = $2 LIMIT $3[0m  [["account_id", 45], ["id", 29], ["LIMIT", 1]]
+Completed 404 Not Found in 3ms (ActiveRecord: 0.7ms)
+  [1m[35m (0.3ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.6ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.3ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (0.3ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mAccount Create (0.5ms)[0m  [1m[32mINSERT INTO "accounts" ("created_at", "updated_at") VALUES ($1, $2) RETURNING "id"[0m  [["created_at", "2018-08-25 17:12:18.545871"], ["updated_at", "2018-08-25 17:12:18.545871"]]
+  [1m[35m (0.2ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+Started GET "/api/v1/accounts/47/shops" for 127.0.0.1 at 2018-08-25 20:12:18 +0300
+Processing by Api::V1::ShopsController#index as HTML
+  Parameters: {"account_id"=>"47"}
+  [1m[36mAccount Load (0.4ms)[0m  [1m[34mSELECT  "accounts".* FROM "accounts" WHERE "accounts"."id" = $1 LIMIT $2[0m  [["id", 47], ["LIMIT", 1]]
+  [1m[36mShop Load (0.4ms)[0m  [1m[34mSELECT "shops".* FROM "shops" WHERE "shops"."account_id" = $1[0m  [["account_id", 47]]
+Completed 200 OK in 18ms (Views: 3.9ms | ActiveRecord: 2.3ms)
+  [1m[35m (0.3ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mShop Exists (0.5ms)[0m  [1m[34mSELECT  1 AS one FROM "shops" WHERE "shops"."name" = $1 AND "shops"."account_id" = $2 LIMIT $3[0m  [["name", "CooP"], ["account_id", 47], ["LIMIT", 1]]
+  [1m[36mShop Create (0.6ms)[0m  [1m[32mINSERT INTO "shops" ("account_id", "name", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "id"[0m  [["account_id", 47], ["name", "CooP"], ["created_at", "2018-08-25 17:12:18.589752"], ["updated_at", "2018-08-25 17:12:18.589752"]]
+  [1m[35m (0.2ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+Started GET "/api/v1/accounts/47/shops" for 127.0.0.1 at 2018-08-25 20:12:18 +0300
+Processing by Api::V1::ShopsController#index as HTML
+  Parameters: {"account_id"=>"47"}
+  [1m[36mAccount Load (0.3ms)[0m  [1m[34mSELECT  "accounts".* FROM "accounts" WHERE "accounts"."id" = $1 LIMIT $2[0m  [["id", 47], ["LIMIT", 1]]
+  [1m[36mShop Load (0.3ms)[0m  [1m[34mSELECT "shops".* FROM "shops" WHERE "shops"."account_id" = $1[0m  [["account_id", 47]]
+Completed 200 OK in 3ms (Views: 1.4ms | ActiveRecord: 0.6ms)
+  [1m[35m (0.3ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (0.2ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mAccount Create (0.4ms)[0m  [1m[32mINSERT INTO "accounts" ("created_at", "updated_at") VALUES ($1, $2) RETURNING "id"[0m  [["created_at", "2018-08-25 17:12:18.600394"], ["updated_at", "2018-08-25 17:12:18.600394"]]
+  [1m[35m (0.2ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mShop Exists (0.4ms)[0m  [1m[34mSELECT  1 AS one FROM "shops" WHERE "shops"."name" = $1 AND "shops"."account_id" = $2 LIMIT $3[0m  [["name", "CooP"], ["account_id", 48], ["LIMIT", 1]]
+  [1m[36mShop Create (0.4ms)[0m  [1m[32mINSERT INTO "shops" ("account_id", "name", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "id"[0m  [["account_id", 48], ["name", "CooP"], ["created_at", "2018-08-25 17:12:18.604137"], ["updated_at", "2018-08-25 17:12:18.604137"]]
+  [1m[35m (0.1ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mAccount Create (0.3ms)[0m  [1m[32mINSERT INTO "accounts" ("created_at", "updated_at") VALUES ($1, $2) RETURNING "id"[0m  [["created_at", "2018-08-25 17:12:18.606280"], ["updated_at", "2018-08-25 17:12:18.606280"]]
+  [1m[35m (0.1ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+Started GET "/api/v1/accounts/49/shops" for 127.0.0.1 at 2018-08-25 20:12:18 +0300
+Processing by Api::V1::ShopsController#index as HTML
+  Parameters: {"account_id"=>"49"}
+  [1m[36mAccount Load (0.3ms)[0m  [1m[34mSELECT  "accounts".* FROM "accounts" WHERE "accounts"."id" = $1 LIMIT $2[0m  [["id", 49], ["LIMIT", 1]]
+  [1m[36mShop Load (0.2ms)[0m  [1m[34mSELECT "shops".* FROM "shops" WHERE "shops"."account_id" = $1[0m  [["account_id", 49]]
+Completed 200 OK in 2ms (Views: 0.8ms | ActiveRecord: 0.5ms)
+  [1m[35m (0.2ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (0.2ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mAccount Create (0.3ms)[0m  [1m[32mINSERT INTO "accounts" ("created_at", "updated_at") VALUES ($1, $2) RETURNING "id"[0m  [["created_at", "2018-08-25 17:12:18.613881"], ["updated_at", "2018-08-25 17:12:18.613881"]]
+  [1m[35m (0.2ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mShop Exists (0.3ms)[0m  [1m[34mSELECT  1 AS one FROM "shops" WHERE "shops"."name" = $1 AND "shops"."account_id" = $2 LIMIT $3[0m  [["name", "CooP"], ["account_id", 50], ["LIMIT", 1]]
+  [1m[36mShop Create (0.3ms)[0m  [1m[32mINSERT INTO "shops" ("account_id", "name", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "id"[0m  [["account_id", 50], ["name", "CooP"], ["created_at", "2018-08-25 17:12:18.617434"], ["updated_at", "2018-08-25 17:12:18.617434"]]
+  [1m[35m (0.2ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+Started GET "/api/v1/accounts/50/shops/32" for 127.0.0.1 at 2018-08-25 20:12:18 +0300
+Processing by Api::V1::ShopsController#show as HTML
+  Parameters: {"account_id"=>"50", "id"=>"32"}
+  [1m[36mAccount Load (0.3ms)[0m  [1m[34mSELECT  "accounts".* FROM "accounts" WHERE "accounts"."id" = $1 LIMIT $2[0m  [["id", 50], ["LIMIT", 1]]
+  [1m[36mShop Load (0.4ms)[0m  [1m[34mSELECT  "shops".* FROM "shops" WHERE "shops"."account_id" = $1 AND "shops"."id" = $2 LIMIT $3[0m  [["account_id", 50], ["id", 32], ["LIMIT", 1]]
+Completed 200 OK in 3ms (Views: 0.4ms | ActiveRecord: 0.7ms)
+  [1m[35m (0.2ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mAccount Create (0.4ms)[0m  [1m[32mINSERT INTO "accounts" ("created_at", "updated_at") VALUES ($1, $2) RETURNING "id"[0m  [["created_at", "2018-08-25 17:12:18.624822"], ["updated_at", "2018-08-25 17:12:18.624822"]]
+  [1m[35m (0.2ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mShop Exists (0.4ms)[0m  [1m[34mSELECT  1 AS one FROM "shops" WHERE "shops"."name" = $1 AND "shops"."account_id" = $2 LIMIT $3[0m  [["name", "CooP"], ["account_id", 51], ["LIMIT", 1]]
+  [1m[36mShop Create (0.4ms)[0m  [1m[32mINSERT INTO "shops" ("account_id", "name", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "id"[0m  [["account_id", 51], ["name", "CooP"], ["created_at", "2018-08-25 17:12:18.630291"], ["updated_at", "2018-08-25 17:12:18.630291"]]
+  [1m[35m (0.2ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+Started GET "/api/v1/accounts/50/shops/33" for 127.0.0.1 at 2018-08-25 20:12:18 +0300
+Processing by Api::V1::ShopsController#show as HTML
+  Parameters: {"account_id"=>"50", "id"=>"33"}
+  [1m[36mAccount Load (0.3ms)[0m  [1m[34mSELECT  "accounts".* FROM "accounts" WHERE "accounts"."id" = $1 LIMIT $2[0m  [["id", 50], ["LIMIT", 1]]
+  [1m[36mShop Load (0.4ms)[0m  [1m[34mSELECT  "shops".* FROM "shops" WHERE "shops"."account_id" = $1 AND "shops"."id" = $2 LIMIT $3[0m  [["account_id", 50], ["id", 33], ["LIMIT", 1]]
+Completed 200 OK in 3ms (Views: 0.2ms | ActiveRecord: 0.7ms)
+  [1m[35m (0.3ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.6ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.3ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (0.2ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mAccount Create (0.6ms)[0m  [1m[32mINSERT INTO "accounts" ("created_at", "updated_at") VALUES ($1, $2) RETURNING "id"[0m  [["created_at", "2018-08-25 17:13:51.022313"], ["updated_at", "2018-08-25 17:13:51.022313"]]
+  [1m[35m (0.2ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+Started GET "/api/v1/accounts/52/shops" for 127.0.0.1 at 2018-08-25 20:13:51 +0300
+Processing by Api::V1::ShopsController#index as HTML
+  Parameters: {"account_id"=>"52"}
+  [1m[36mAccount Load (0.4ms)[0m  [1m[34mSELECT  "accounts".* FROM "accounts" WHERE "accounts"."id" = $1 LIMIT $2[0m  [["id", 52], ["LIMIT", 1]]
+  [1m[36mShop Load (0.4ms)[0m  [1m[34mSELECT "shops".* FROM "shops" WHERE "shops"."account_id" = $1[0m  [["account_id", 52]]
+Completed 200 OK in 18ms (Views: 3.7ms | ActiveRecord: 2.3ms)
+  [1m[35m (0.3ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mShop Exists (0.5ms)[0m  [1m[34mSELECT  1 AS one FROM "shops" WHERE "shops"."name" = $1 AND "shops"."account_id" = $2 LIMIT $3[0m  [["name", "CooP"], ["account_id", 52], ["LIMIT", 1]]
+  [1m[36mShop Create (0.6ms)[0m  [1m[32mINSERT INTO "shops" ("account_id", "name", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "id"[0m  [["account_id", 52], ["name", "CooP"], ["created_at", "2018-08-25 17:13:51.066057"], ["updated_at", "2018-08-25 17:13:51.066057"]]
+  [1m[35m (0.1ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+Started GET "/api/v1/accounts/52/shops" for 127.0.0.1 at 2018-08-25 20:13:51 +0300
+Processing by Api::V1::ShopsController#index as HTML
+  Parameters: {"account_id"=>"52"}
+  [1m[36mAccount Load (0.3ms)[0m  [1m[34mSELECT  "accounts".* FROM "accounts" WHERE "accounts"."id" = $1 LIMIT $2[0m  [["id", 52], ["LIMIT", 1]]
+  [1m[36mShop Load (0.3ms)[0m  [1m[34mSELECT "shops".* FROM "shops" WHERE "shops"."account_id" = $1[0m  [["account_id", 52]]
+Completed 200 OK in 3ms (Views: 1.5ms | ActiveRecord: 0.7ms)
+  [1m[35m (0.2ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (0.2ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mAccount Create (0.4ms)[0m  [1m[32mINSERT INTO "accounts" ("created_at", "updated_at") VALUES ($1, $2) RETURNING "id"[0m  [["created_at", "2018-08-25 17:13:51.076331"], ["updated_at", "2018-08-25 17:13:51.076331"]]
+  [1m[35m (0.2ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mShop Exists (0.4ms)[0m  [1m[34mSELECT  1 AS one FROM "shops" WHERE "shops"."name" = $1 AND "shops"."account_id" = $2 LIMIT $3[0m  [["name", "CooP"], ["account_id", 53], ["LIMIT", 1]]
+  [1m[36mShop Create (0.5ms)[0m  [1m[32mINSERT INTO "shops" ("account_id", "name", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "id"[0m  [["account_id", 53], ["name", "CooP"], ["created_at", "2018-08-25 17:13:51.080136"], ["updated_at", "2018-08-25 17:13:51.080136"]]
+  [1m[35m (0.2ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mAccount Create (0.3ms)[0m  [1m[32mINSERT INTO "accounts" ("created_at", "updated_at") VALUES ($1, $2) RETURNING "id"[0m  [["created_at", "2018-08-25 17:13:51.082628"], ["updated_at", "2018-08-25 17:13:51.082628"]]
+  [1m[35m (0.2ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+Started GET "/api/v1/accounts/54/shops" for 127.0.0.1 at 2018-08-25 20:13:51 +0300
+Processing by Api::V1::ShopsController#index as HTML
+  Parameters: {"account_id"=>"54"}
+  [1m[36mAccount Load (0.4ms)[0m  [1m[34mSELECT  "accounts".* FROM "accounts" WHERE "accounts"."id" = $1 LIMIT $2[0m  [["id", 54], ["LIMIT", 1]]
+  [1m[36mShop Load (0.3ms)[0m  [1m[34mSELECT "shops".* FROM "shops" WHERE "shops"."account_id" = $1[0m  [["account_id", 54]]
+Completed 200 OK in 3ms (Views: 0.8ms | ActiveRecord: 0.6ms)
+  [1m[35m (0.2ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (0.2ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mAccount Create (0.4ms)[0m  [1m[32mINSERT INTO "accounts" ("created_at", "updated_at") VALUES ($1, $2) RETURNING "id"[0m  [["created_at", "2018-08-25 17:13:51.090976"], ["updated_at", "2018-08-25 17:13:51.090976"]]
+  [1m[35m (0.2ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mShop Exists (0.4ms)[0m  [1m[34mSELECT  1 AS one FROM "shops" WHERE "shops"."name" = $1 AND "shops"."account_id" = $2 LIMIT $3[0m  [["name", "CooP"], ["account_id", 55], ["LIMIT", 1]]
+  [1m[36mShop Create (0.5ms)[0m  [1m[32mINSERT INTO "shops" ("account_id", "name", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "id"[0m  [["account_id", 55], ["name", "CooP"], ["created_at", "2018-08-25 17:13:51.094755"], ["updated_at", "2018-08-25 17:13:51.094755"]]
+  [1m[35m (0.2ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+Started GET "/api/v1/accounts/55/shops/36" for 127.0.0.1 at 2018-08-25 20:13:51 +0300
+Processing by Api::V1::ShopsController#show as HTML
+  Parameters: {"account_id"=>"55", "id"=>"36"}
+  [1m[36mAccount Load (0.3ms)[0m  [1m[34mSELECT  "accounts".* FROM "accounts" WHERE "accounts"."id" = $1 LIMIT $2[0m  [["id", 55], ["LIMIT", 1]]
+  [1m[36mShop Load (0.4ms)[0m  [1m[34mSELECT  "shops".* FROM "shops" WHERE "shops"."account_id" = $1 AND "shops"."id" = $2 LIMIT $3[0m  [["account_id", 55], ["id", 36], ["LIMIT", 1]]
+Completed 200 OK in 3ms (Views: 0.6ms | ActiveRecord: 0.8ms)
+  [1m[35m (0.2ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mAccount Create (1.2ms)[0m  [1m[32mINSERT INTO "accounts" ("created_at", "updated_at") VALUES ($1, $2) RETURNING "id"[0m  [["created_at", "2018-08-25 17:13:51.103295"], ["updated_at", "2018-08-25 17:13:51.103295"]]
+  [1m[35m (0.1ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mShop Exists (0.4ms)[0m  [1m[34mSELECT  1 AS one FROM "shops" WHERE "shops"."name" = $1 AND "shops"."account_id" = $2 LIMIT $3[0m  [["name", "CooP"], ["account_id", 56], ["LIMIT", 1]]
+  [1m[36mShop Create (0.5ms)[0m  [1m[32mINSERT INTO "shops" ("account_id", "name", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "id"[0m  [["account_id", 56], ["name", "CooP"], ["created_at", "2018-08-25 17:13:51.108842"], ["updated_at", "2018-08-25 17:13:51.108842"]]
+  [1m[35m (0.2ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+Started GET "/api/v1/accounts/55/shops/37" for 127.0.0.1 at 2018-08-25 20:13:51 +0300
+Processing by Api::V1::ShopsController#show as HTML
+  Parameters: {"account_id"=>"55", "id"=>"37"}
+  [1m[36mAccount Load (0.3ms)[0m  [1m[34mSELECT  "accounts".* FROM "accounts" WHERE "accounts"."id" = $1 LIMIT $2[0m  [["id", 55], ["LIMIT", 1]]
+  [1m[36mShop Load (0.3ms)[0m  [1m[34mSELECT  "shops".* FROM "shops" WHERE "shops"."account_id" = $1 AND "shops"."id" = $2 LIMIT $3[0m  [["account_id", 55], ["id", 37], ["LIMIT", 1]]
+Completed 404 Not Found in 3ms (Views: 0.2ms | ActiveRecord: 0.7ms)
+  [1m[35m (0.3ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.5ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (0.1ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mAccount Create (0.4ms)[0m  [1m[32mINSERT INTO "accounts" ("created_at", "updated_at") VALUES ($1, $2) RETURNING "id"[0m  [["created_at", "2018-08-25 17:14:08.920625"], ["updated_at", "2018-08-25 17:14:08.920625"]]
+  [1m[35m (0.1ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+Started GET "/api/v1/accounts/57/shops" for 127.0.0.1 at 2018-08-25 20:14:08 +0300
+Processing by Api::V1::ShopsController#index as HTML
+  Parameters: {"account_id"=>"57"}
+  [1m[36mAccount Load (0.2ms)[0m  [1m[34mSELECT  "accounts".* FROM "accounts" WHERE "accounts"."id" = $1 LIMIT $2[0m  [["id", 57], ["LIMIT", 1]]
+  [1m[36mShop Load (0.3ms)[0m  [1m[34mSELECT "shops".* FROM "shops" WHERE "shops"."account_id" = $1[0m  [["account_id", 57]]
+Completed 200 OK in 17ms (Views: 3.7ms | ActiveRecord: 1.8ms)
+  [1m[35m (0.1ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mShop Exists (0.4ms)[0m  [1m[34mSELECT  1 AS one FROM "shops" WHERE "shops"."name" = $1 AND "shops"."account_id" = $2 LIMIT $3[0m  [["name", "CooP"], ["account_id", 57], ["LIMIT", 1]]
+  [1m[36mShop Create (0.8ms)[0m  [1m[32mINSERT INTO "shops" ("account_id", "name", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "id"[0m  [["account_id", 57], ["name", "CooP"], ["created_at", "2018-08-25 17:14:08.962582"], ["updated_at", "2018-08-25 17:14:08.962582"]]
+  [1m[35m (0.2ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+Started GET "/api/v1/accounts/57/shops" for 127.0.0.1 at 2018-08-25 20:14:08 +0300
+Processing by Api::V1::ShopsController#index as HTML
+  Parameters: {"account_id"=>"57"}
+  [1m[36mAccount Load (0.3ms)[0m  [1m[34mSELECT  "accounts".* FROM "accounts" WHERE "accounts"."id" = $1 LIMIT $2[0m  [["id", 57], ["LIMIT", 1]]
+  [1m[36mShop Load (0.4ms)[0m  [1m[34mSELECT "shops".* FROM "shops" WHERE "shops"."account_id" = $1[0m  [["account_id", 57]]
+Completed 200 OK in 3ms (Views: 1.4ms | ActiveRecord: 0.7ms)
+  [1m[35m (0.3ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (0.1ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mAccount Create (0.3ms)[0m  [1m[32mINSERT INTO "accounts" ("created_at", "updated_at") VALUES ($1, $2) RETURNING "id"[0m  [["created_at", "2018-08-25 17:14:08.973287"], ["updated_at", "2018-08-25 17:14:08.973287"]]
+  [1m[35m (0.1ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mShop Exists (0.4ms)[0m  [1m[34mSELECT  1 AS one FROM "shops" WHERE "shops"."name" = $1 AND "shops"."account_id" = $2 LIMIT $3[0m  [["name", "CooP"], ["account_id", 58], ["LIMIT", 1]]
+  [1m[36mShop Create (0.6ms)[0m  [1m[32mINSERT INTO "shops" ("account_id", "name", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "id"[0m  [["account_id", 58], ["name", "CooP"], ["created_at", "2018-08-25 17:14:08.976945"], ["updated_at", "2018-08-25 17:14:08.976945"]]
+  [1m[35m (0.2ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mAccount Create (0.4ms)[0m  [1m[32mINSERT INTO "accounts" ("created_at", "updated_at") VALUES ($1, $2) RETURNING "id"[0m  [["created_at", "2018-08-25 17:14:08.979517"], ["updated_at", "2018-08-25 17:14:08.979517"]]
+  [1m[35m (0.2ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+Started GET "/api/v1/accounts/59/shops" for 127.0.0.1 at 2018-08-25 20:14:08 +0300
+Processing by Api::V1::ShopsController#index as HTML
+  Parameters: {"account_id"=>"59"}
+  [1m[36mAccount Load (0.3ms)[0m  [1m[34mSELECT  "accounts".* FROM "accounts" WHERE "accounts"."id" = $1 LIMIT $2[0m  [["id", 59], ["LIMIT", 1]]
+  [1m[36mShop Load (0.3ms)[0m  [1m[34mSELECT "shops".* FROM "shops" WHERE "shops"."account_id" = $1[0m  [["account_id", 59]]
+Completed 200 OK in 2ms (Views: 0.8ms | ActiveRecord: 0.7ms)
+  [1m[35m (0.2ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (0.2ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mAccount Create (0.4ms)[0m  [1m[32mINSERT INTO "accounts" ("created_at", "updated_at") VALUES ($1, $2) RETURNING "id"[0m  [["created_at", "2018-08-25 17:14:08.987657"], ["updated_at", "2018-08-25 17:14:08.987657"]]
+  [1m[35m (0.2ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mShop Exists (0.4ms)[0m  [1m[34mSELECT  1 AS one FROM "shops" WHERE "shops"."name" = $1 AND "shops"."account_id" = $2 LIMIT $3[0m  [["name", "CooP"], ["account_id", 60], ["LIMIT", 1]]
+  [1m[36mShop Create (0.4ms)[0m  [1m[32mINSERT INTO "shops" ("account_id", "name", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "id"[0m  [["account_id", 60], ["name", "CooP"], ["created_at", "2018-08-25 17:14:08.991588"], ["updated_at", "2018-08-25 17:14:08.991588"]]
+  [1m[35m (0.2ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+Started GET "/api/v1/accounts/60/shops/40" for 127.0.0.1 at 2018-08-25 20:14:08 +0300
+Processing by Api::V1::ShopsController#show as HTML
+  Parameters: {"account_id"=>"60", "id"=>"40"}
+  [1m[36mAccount Load (0.3ms)[0m  [1m[34mSELECT  "accounts".* FROM "accounts" WHERE "accounts"."id" = $1 LIMIT $2[0m  [["id", 60], ["LIMIT", 1]]
+  [1m[36mShop Load (0.4ms)[0m  [1m[34mSELECT  "shops".* FROM "shops" WHERE "shops"."account_id" = $1 AND "shops"."id" = $2 LIMIT $3[0m  [["account_id", 60], ["id", 40], ["LIMIT", 1]]
+Completed 200 OK in 3ms (Views: 0.6ms | ActiveRecord: 0.8ms)
+  [1m[35m (0.3ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mAccount Create (0.4ms)[0m  [1m[32mINSERT INTO "accounts" ("created_at", "updated_at") VALUES ($1, $2) RETURNING "id"[0m  [["created_at", "2018-08-25 17:14:08.999849"], ["updated_at", "2018-08-25 17:14:08.999849"]]
+  [1m[35m (0.9ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mShop Exists (0.4ms)[0m  [1m[34mSELECT  1 AS one FROM "shops" WHERE "shops"."name" = $1 AND "shops"."account_id" = $2 LIMIT $3[0m  [["name", "CooP"], ["account_id", 61], ["LIMIT", 1]]
+  [1m[36mShop Create (0.4ms)[0m  [1m[32mINSERT INTO "shops" ("account_id", "name", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "id"[0m  [["account_id", 61], ["name", "CooP"], ["created_at", "2018-08-25 17:14:09.005038"], ["updated_at", "2018-08-25 17:14:09.005038"]]
+  [1m[35m (0.2ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+Started GET "/api/v1/accounts/60/shops/41" for 127.0.0.1 at 2018-08-25 20:14:09 +0300
+Processing by Api::V1::ShopsController#show as HTML
+  Parameters: {"account_id"=>"60", "id"=>"41"}
+  [1m[36mAccount Load (0.3ms)[0m  [1m[34mSELECT  "accounts".* FROM "accounts" WHERE "accounts"."id" = $1 LIMIT $2[0m  [["id", 60], ["LIMIT", 1]]
+  [1m[36mShop Load (0.4ms)[0m  [1m[34mSELECT  "shops".* FROM "shops" WHERE "shops"."account_id" = $1 AND "shops"."id" = $2 LIMIT $3[0m  [["account_id", 60], ["id", 41], ["LIMIT", 1]]
+Completed 404 Not Found in 3ms (Views: 0.2ms | ActiveRecord: 0.7ms)
+  [1m[35m (0.3ms)[0m  [1m[31mROLLBACK[0m
