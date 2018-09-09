@@ -18,9 +18,9 @@ gem 'rack-cors'
 
 group :development, :test do
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
+  gem 'factory_bot_rails', '~> 4.0'
   gem 'pry'
   gem 'rspec-rails', '~> 3.7'
-  gem "factory_bot_rails", "~> 4.0"
 end
 
 group :development do
@@ -31,5 +31,5 @@ group :development do
   gem 'spring-watcher-listen', '~> 2.0.0'
 end
 
-gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 gem 'simplecov', require: false, group: :test
+gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]

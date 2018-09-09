@@ -3,7 +3,6 @@
 require 'rails_helper'
 
 RSpec.describe 'Shops management', type: :request do
-
   let(:account) { create(:account) }
 
   scenario 'User gets a list of account-related Shops' do
@@ -44,16 +43,37 @@ RSpec.describe 'Shops management', type: :request do
     get "/api/v1/accounts/#{account.id}/shops/#{other_shop.id}"
 
     expect(response.status).to eq(404)
+    expect(response.body).to include('Shop not found')
     expect(response.body).not_to include(shop.name)
   end
 
+  scenario 'User can not create a non-valid shop' do
+    expect do
+      post "/api/v1/accounts/#{account.id}/shops/", params: { shop: { name: nil } }
+    end.not_to change(Shop, :count)
 
-  # scenario 'User creates a new shop' do
-  #   visit '/widgets/new'
+    expect(response.status).to eq(422)
+    expect(JSON.parse(response.body)).to eq('name' => ["can't be blank"])
+  end
 
-  #   fill_in 'Name', with: 'My Widget'
-  #   click_button 'Create Widget'
+  scenario 'Accountless shop can not be created' do
+    shop_attributes = FactoryBot.attributes_for :shop
 
-  #   expect(page).to have_text('Widget was successfully created.')
-  # end
+    expect do
+      post '/api/v1/accounts/777/shops/', params: { shop: shop_attributes }
+    end.not_to change(Shop, :count)
+
+    expect(response.status).to eq(404)
+    expect(response.body).to include('Account not found')
+  end
+
+  scenario 'User creates a new shop' do
+    shop_attributes = FactoryBot.attributes_for :shop
+
+    expect do
+      post "/api/v1/accounts/#{account.id}/shops/", params: { shop: shop_attributes }
+    end.to change(Shop, :count)
+
+    expect(response.status).to eq(201)
+  end
 end
