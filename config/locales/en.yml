@@ -31,3 +31,8 @@
 
 en:
   hello: "Hello world"
+  account:
+    not_found: 'Account not found'
+
+  shop:
+    not_found: 'Shop not found'  

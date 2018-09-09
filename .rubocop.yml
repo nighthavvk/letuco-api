@@ -1,6 +1,6 @@
 AllCops:
   Excludes:
-    - db/**
+    - db/**/*
     - config/**/*
     - script/**
     - lib/**/*
