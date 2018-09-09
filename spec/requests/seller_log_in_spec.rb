@@ -53,16 +53,3 @@ RSpec.describe 'Sellers log in', type: :request do
     expect(response.body).to include('Invalid login credentials')
   end
 end
-
-# {"Content-Type"=>"application/json; charset=utf-8",
-#  "access-token"=>"oBpnPYisaWWUQA1qWKHWzw",
-#  "token-type"=>"Bearer",
-#  "client"=>"SwJJVugkaJO4yJvJdBVEMw",
-#  "expiry"=>"1537725686",
-#  "uid"=>"test@example.com",
-#  "Vary"=>"Origin",
-#  "ETag"=>"W/\"2825f71ca9287e5a9ebf11f8c139a45c\"",
-#  "Cache-Control"=>"max-age=0, private, must-revalidate",
-#  "X-Request-Id"=>"1c8a6488-81f2-486d-949b-ff90ba80aa8c",
-#  "X-Runtime"=>"0.190356",
-#  "Content-Length"=>"177"}

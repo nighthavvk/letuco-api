@@ -3,8 +3,7 @@
 module Api
   module V1
     class ShopsController < ApplicationController
-      #TODO: Uncomment this and update specs right away
-      # before_action :authenticate_seller!
+      before_action :authenticate_seller!
 
       before_action :set_account, only: %i[index create show]
       before_action :set_shop, only: [:show]
