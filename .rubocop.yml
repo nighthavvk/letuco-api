@@ -3,9 +3,10 @@ AllCops:
     - db/**/*
     - config/**/*
     - script/**
+    - spec/**/*
     - lib/**/*
     - bin/*
 Style/Documentation:
   Enabled: false  
 Metrics/LineLength:
-  Max: 100
+  Max: 125
