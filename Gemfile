@@ -11,6 +11,11 @@ gem 'rails', '~> 5.2.1'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 # gem 'jbuilder', '~> 2.5'
 
+gem 'devise_token_auth'
+gem 'omniauth-facebook'
+
+gem 'dotenv-rails', groups: %i[development test]
+
 gem 'bootsnap', require: false
 
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible

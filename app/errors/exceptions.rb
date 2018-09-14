@@ -9,10 +9,6 @@ module Exceptions
       @status = status || :unprocessable_entity
       @message = message || 'Something went wrong'
     end
-
-    def as_json
-      { errors: [{ status: @status, detail: @message }] }
-    end
   end
 
   class NotFound < CustomError

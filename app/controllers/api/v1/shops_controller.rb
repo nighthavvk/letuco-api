@@ -3,6 +3,8 @@
 module Api
   module V1
     class ShopsController < ApplicationController
+      before_action :authenticate_seller!
+
       before_action :set_account, only: %i[index create show]
       before_action :set_shop, only: [:show]
 
@@ -29,13 +31,13 @@ module Api
       def set_account
         @account ||= Account.find(params[:account_id])
       rescue ActiveRecord::RecordNotFound
-        raise Exceptions::NotFound, 'Account not found'
+        raise Exceptions::NotFound, I18n.t('account.not_found')
       end
 
       def set_shop
         @shop ||= @account.shops.find(params[:id])
       rescue ActiveRecord::RecordNotFound
-        raise Exceptions::NotFound, 'Shop not found'
+        raise Exceptions::NotFound, I18n.t('shop.not_found')
       end
 
       def shop_params

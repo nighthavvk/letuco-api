@@ -1,22 +1,61 @@
 # frozen_string_literal: true
 
 class Seller < ApplicationRecord
+  # Include default devise modules.
+  devise :database_authenticatable, :registerable,
+         :recoverable, :rememberable, :trackable, :validatable,
+         :confirmable # , :omniauthable
+  include DeviseTokenAuth::Concerns::User
+
+  before_validation :handle_account, on: :create
+
   belongs_to :account
+
+  private
+
+  def handle_account
+    # TODO: handle with :invitable later
+    self.account = Account.new
+  end
 end
 
 # == Schema Information
 #
 # Table name: sellers
 #
-#  id         :bigint(8)        not null, primary key
-#  name       :string
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
-#  account_id :bigint(8)
+#  id                     :bigint(8)        not null, primary key
+#  allow_password_change  :boolean          default(FALSE)
+#  confirmation_sent_at   :datetime
+#  confirmation_token     :string
+#  confirmed_at           :datetime
+#  current_sign_in_at     :datetime
+#  current_sign_in_ip     :string
+#  email                  :string
+#  encrypted_password     :string           default(""), not null
+#  image                  :string
+#  last_sign_in_at        :datetime
+#  last_sign_in_ip        :string
+#  name                   :string
+#  nickname               :string
+#  provider               :string           default("email"), not null
+#  remember_created_at    :datetime
+#  reset_password_sent_at :datetime
+#  reset_password_token   :string
+#  sign_in_count          :integer          default(0), not null
+#  tokens                 :json
+#  uid                    :string           default(""), not null
+#  unconfirmed_email      :string
+#  created_at             :datetime         not null
+#  updated_at             :datetime         not null
+#  account_id             :bigint(8)
 #
 # Indexes
 #
-#  index_sellers_on_account_id  (account_id)
+#  index_sellers_on_account_id            (account_id)
+#  index_sellers_on_confirmation_token    (confirmation_token) UNIQUE
+#  index_sellers_on_email                 (email) UNIQUE
+#  index_sellers_on_reset_password_token  (reset_password_token) UNIQUE
+#  index_sellers_on_uid_and_provider      (uid,provider) UNIQUE
 #
 # Foreign Keys
 #
