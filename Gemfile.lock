@@ -235,6 +235,7 @@ DEPENDENCIES
   annotate
   bootsnap
   byebug
+  devise
   devise_invitable
   devise_token_auth
   dotenv-rails

@@ -8,9 +8,8 @@ ruby '2.5.1' # ruby '2.3.1'
 gem 'pg'
 gem 'puma', '~> 3.11'
 gem 'rails', '~> 5.2.1'
-# Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
-# gem 'jbuilder', '~> 2.5'
 
+gem 'devise'
 gem 'devise_invitable'
 gem 'devise_token_auth'
 gem 'omniauth-facebook'
