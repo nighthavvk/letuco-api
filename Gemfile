@@ -37,6 +37,3 @@ end
 
 gem 'simplecov', require: false, group: :test
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
-
-# Docs
-gem 'slate-installer'
