@@ -61,6 +61,9 @@ GEM
       railties (>= 4.1.0, < 6.0)
       responders
       warden (~> 1.2.3)
+    devise_invitable (1.7.4)
+      actionmailer (>= 4.1.0)
+      devise (>= 4.0.0)
     devise_token_auth (0.2.0)
       devise (> 3.5.2, < 4.5)
       rails (< 6)
@@ -232,6 +235,8 @@ DEPENDENCIES
   annotate
   bootsnap
   byebug
+  devise
+  devise_invitable
   devise_token_auth
   dotenv-rails
   factory_bot_rails (~> 4.0)

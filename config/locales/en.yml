@@ -31,8 +31,11 @@
 
 en:
   hello: "Hello world"
-  account:
-    not_found: 'Account not found'
-
-  shop:
-    not_found: 'Shop not found'  
+  errors:
+    account:
+      not_found: 'Account not found'
+    shop:
+      not_found: 'Shop not found'
+    seller:
+      email_in_use: 'Email in use'
+      email_not_valid: 'Email not valid'
