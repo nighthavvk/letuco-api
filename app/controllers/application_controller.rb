@@ -3,16 +3,15 @@
 class ApplicationController < ActionController::API
   include DeviseTokenAuth::Concerns::SetUserByToken
 
-  # rescue_from ActiveRecord::RecordNotFound, with: :render_error_response
-  rescue_from Exceptions::NotFound, with: :render_error_response
+  rescue_from StandardError, with: :render_error_response # Exceptions::*
 
   def render_error_response(error)
     render json: {
       errors: {
-        code: 404,
+        code: error.status,
         message: error.message,
         details: {}
       }
-    }, status: 404
+    }, status: error.status
   end
 end

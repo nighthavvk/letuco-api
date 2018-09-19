@@ -31,13 +31,13 @@ module Api
       def set_account
         @account ||= Account.find(params[:account_id])
       rescue ActiveRecord::RecordNotFound
-        raise Exceptions::NotFound, I18n.t('account.not_found')
+        raise Exceptions::NotFound, I18n.t('errors.account.not_found')
       end
 
       def set_shop
         @shop ||= @account.shops.find(params[:id])
       rescue ActiveRecord::RecordNotFound
-        raise Exceptions::NotFound, I18n.t('shop.not_found')
+        raise Exceptions::NotFound, I18n.t('errors.shop.not_found')
       end
 
       def shop_params
