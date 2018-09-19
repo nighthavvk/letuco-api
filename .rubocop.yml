@@ -7,6 +7,8 @@ AllCops:
     - lib/**/*
     - bin/*
 Style/Documentation:
-  Enabled: false  
+  Enabled: false
 Metrics/LineLength:
   Max: 125
+Style/FrozenStringLiteralComment:
+  Enabled: false

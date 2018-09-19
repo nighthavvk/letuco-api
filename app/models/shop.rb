@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class Shop < ApplicationRecord
   belongs_to :account
   has_many :products

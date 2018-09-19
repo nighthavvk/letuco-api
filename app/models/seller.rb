@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class Seller < ApplicationRecord
   # Include default devise modules.
   devise :database_authenticatable, :registerable,
