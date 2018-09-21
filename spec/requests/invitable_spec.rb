@@ -115,9 +115,9 @@ RSpec.describe 'Invitable spec(s)', type: :request do
       'token_type'   => token_type
     }
 
-    # can see shops
+    # can't see shops as non-admin
     get "/api/v1/accounts/#{@account.id}/shops", headers: new_auth_params
-    expect(response.status).to eq(200)
+    expect(response.status).to eq(401)
 
     # can't invite users (as non-admin)
     post '/api/v1/sellers/invite', params: { email: 'test3@example.com' }, headers: new_auth_params

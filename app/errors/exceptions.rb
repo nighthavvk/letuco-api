@@ -11,13 +11,19 @@ module Exceptions
 
   class NotFound < CustomError
     def initialize(message)
-      super(:account_not_found, 404, message)
+      super(:not_found, 404, message)
     end
   end
 
   class EmailNotValid < CustomError
     def initialize(message)
-      super(:account_not_found, 422, message)
+      super(:email_not_valid, 422, message)
+    end
+  end
+
+  class Unauthorized < CustomError
+    def initialize(message)
+      super(:unauthorized, 401, message)
     end
   end
 end

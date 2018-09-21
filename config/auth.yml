@@ -1,0 +1,19 @@
+defaults: &defaults
+    god:
+      - all
+    admin:
+      api/v1/shops:
+        - all
+
+    seller:
+      api/v1/shops:
+        - show # ???!!!
+
+test:
+    <<: *defaults
+development:
+    <<: *defaults
+staging:
+    <<: *defaults
+production:
+    <<: *defaults

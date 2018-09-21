@@ -39,8 +39,3 @@ module Api
     end
   end
 end
-
-# curl --header "Content-Type: application/json" \
-#   --request POST \
-#   --data '{"product": { "name": "sex toy" }}' \
-#   'http://localhost:3000/api/v1/accounts/1/shops/1/products'

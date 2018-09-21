@@ -18,11 +18,12 @@ class Seller < ApplicationRecord
 
   def handle_new_account
     self.account = Account.new
-    self.role = 'admin'
+    self.role    = 'admin'
   end
 
   def handle_invited_account
     self.account = invited_by.account
+    self.role    = 'seller'
   end
 end
 

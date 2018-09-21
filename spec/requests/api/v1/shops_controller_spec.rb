@@ -39,8 +39,12 @@ RSpec.describe 'Shops management', type: :request do
     expect(response.status).to eq(401)
     expect(response.body).to include('You need to sign in or sign up before continuing.')
 
-    get "/api/v1/accounts/#{@account.id}/shops", headers: @auth_params
+    account2 = create(:account)
+    get "/api/v1/accounts/#{account2.id}/shops", headers: @auth_params
+    expect(response.status).to eq(404)
+    expect(response.body).to include('Account not found')
 
+    get "/api/v1/accounts/#{@account.id}/shops", headers: @auth_params
     expect(response.status).to eq(200)
     expect(response.body).to eq('[]')
 
@@ -66,7 +70,6 @@ RSpec.describe 'Shops management', type: :request do
     shop = create(:shop, account: @account)
 
     get "/api/v1/accounts/#{@account.id}/shops/#{shop.id}", headers: @auth_params
-
     expect(response.status).to eq(200)
     expect(response.body).to include(shop.name)
 
@@ -87,6 +90,17 @@ RSpec.describe 'Shops management', type: :request do
 
     expect(response.status).to eq(422)
     expect(JSON.parse(response.body)).to eq('name' => ["can't be blank"])
+  end
+
+  scenario 'User can not create a shop with non-unique name' do
+    shop = create(:shop, account: @account)
+
+    expect do
+      post "/api/v1/accounts/#{@account.id}/shops/", params: { shop: { name: shop.name } }, headers: @auth_params
+    end.not_to change(Shop, :count)
+
+    expect(response.status).to eq(422)
+    expect(JSON.parse(response.body)).to eq('name' => ["has already been taken"])
   end
 
   scenario 'Accountless shop can not be created' do
