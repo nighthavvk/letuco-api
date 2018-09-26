@@ -9,9 +9,14 @@ class Seller < ApplicationRecord
   before_invitation_created :handle_invited_account
 
   belongs_to :account
+  has_and_belongs_to_many :shops
 
   def admin?
     role == 'admin'
+  end
+
+  def can_manage?(shop)
+    admin? || shops.include?(shop)
   end
 
   private

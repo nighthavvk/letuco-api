@@ -66,7 +66,7 @@ RSpec.describe 'Sellers management', type: :request do
 
     expect do
       get "/auth/confirmation?config=default&confirmation_token=#{random_token}&redirect_url=http://localhost:3000/auth/validate_token"
-    end.to raise_error
+    end.to raise_error NoMethodError
 
     get "/auth/confirmation?config=default&confirmation_token=#{seller.confirmation_token}&redirect_url=http://localhost:3000/auth/validate_token"
     expect(response.status).to eq(302)

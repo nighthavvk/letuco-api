@@ -22,6 +22,7 @@ gem 'rack-cors'
 group :development, :test do
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
   gem 'factory_bot_rails', '~> 4.0'
+  gem 'faker'
   gem 'pry'
   gem 'rspec-rails', '~> 3.7'
 end

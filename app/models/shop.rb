@@ -1,5 +1,6 @@
 class Shop < ApplicationRecord
   belongs_to :account
+  has_and_belongs_to_many :sellers
   has_many :products
 
   validates :name, presence: true

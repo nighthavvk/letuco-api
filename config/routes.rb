@@ -15,7 +15,9 @@ Rails.application.routes.draw do
       end
       resources :accounts, only: %i[create show] do
         resources :shops, only: %i[index create show] do
-          resources :products
+          member { post :assign_seller }
+
+          resources :products, only: %i[index create update destroy]
           resources :orders
         end
       end

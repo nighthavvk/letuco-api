@@ -1,37 +1,15 @@
 require 'rails_helper'
 
 RSpec.describe 'Shops management', type: :request do
-  let(:sign_up_params) do
-    {
-      email: 'test@example.com',
-      password: '11112222',
-      password_confirmation: '11112222'
-    }
-  end
-
   before do
-    post '/auth', params: sign_up_params
+    sign_up_params = build(:sign_up_params)
 
-    id = JSON.parse(response.body)['data']['id']
-    @seller = Seller.find(id)
-    @seller.confirm
+    post '/auth', params: sign_up_params
+    @seller = AuthSeller.new(response).sign_up
     @account = @seller.account
 
-    post '/auth/sign_in', params: { email: 'test@example.com', password: '11112222' }
-
-    client     = response.headers['client']
-    token      = response.headers['access-token']
-    expiry     = response.headers['expiry']
-    token_type = response.headers['token-type']
-    uid        = response.headers['uid']
-
-    @auth_params = {
-      'access-token' => token,
-      'client' => client,
-      'uid' => uid,
-      'expiry' => expiry,
-      'token_type' => token_type
-    }
+    post '/auth/sign_in', params: { email: sign_up_params[:email], password: sign_up_params[:password] }
+    @auth_params = AuthSeller.new(response).sign_in
   end
 
   scenario 'User gets a list of account-related Shops' do

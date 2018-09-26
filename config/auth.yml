@@ -4,10 +4,13 @@ defaults: &defaults
     admin:
       api/v1/shops:
         - all
-
+      api/v1/products:
+        - all
     seller:
       api/v1/shops:
-        - show # ???!!!
+        - show # ???!!! shop < = > user ids
+      api/v1/products:
+        - all # ???!!! shop < = > user ids
 
 test:
     <<: *defaults

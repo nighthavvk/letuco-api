@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_09_19_084909) do
+ActiveRecord::Schema.define(version: 2018_09_25_131223) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -102,6 +102,13 @@ ActiveRecord::Schema.define(version: 2018_09_19_084909) do
     t.index ["invited_by_type", "invited_by_id"], name: "index_sellers_on_invited_by_type_and_invited_by_id"
     t.index ["reset_password_token"], name: "index_sellers_on_reset_password_token", unique: true
     t.index ["uid", "provider"], name: "index_sellers_on_uid_and_provider", unique: true
+  end
+
+  create_table "sellers_shops", id: false, force: :cascade do |t|
+    t.bigint "shop_id", null: false
+    t.bigint "seller_id", null: false
+    t.index ["seller_id", "shop_id"], name: "index_sellers_shops_on_seller_id_and_shop_id"
+    t.index ["shop_id", "seller_id"], name: "index_sellers_shops_on_shop_id_and_seller_id"
   end
 
   create_table "shops", force: :cascade do |t|

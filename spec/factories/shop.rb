@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :shop do
-    name { 'CooP' }
+    name { Faker::Company.unique.name }
     association :account, factory: :account
   end
 end

@@ -39,5 +39,7 @@ en:
     seller:
       email_in_use: 'Email in use'
       email_not_valid: 'Email not valid'
+    product:
+      not_found: 'Product not found'
     unauthorized:
       message: 'User not authorized'
