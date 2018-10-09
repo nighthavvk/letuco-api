@@ -2,6 +2,7 @@ class Shop < ApplicationRecord
   belongs_to :account
   has_and_belongs_to_many :sellers
   has_many :products
+  has_many :orders, -> { distinct }, through: :products
 
   validates :name, presence: true
   validates :name, uniqueness: { scope: :account_id }

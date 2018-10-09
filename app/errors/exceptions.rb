@@ -26,4 +26,10 @@ module Exceptions
       super(:unauthorized, 401, message)
     end
   end
+
+  class NoProductsFound < CustomError
+    def initialize(message)
+      super(:not_found, 404, message)
+    end
+  end
 end

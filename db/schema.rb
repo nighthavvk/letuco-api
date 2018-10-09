@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_09_25_131223) do
+ActiveRecord::Schema.define(version: 2018_10_08_125229) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -24,25 +24,18 @@ ActiveRecord::Schema.define(version: 2018_09_25_131223) do
     t.bigint "account_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "name"
     t.index ["account_id"], name: "index_customers_on_account_id"
   end
 
-  create_table "invites", force: :cascade do |t|
-    t.string "email"
-    t.string "state"
-    t.string "token"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "orders", force: :cascade do |t|
-    t.bigint "shop_id"
+    t.bigint "customer_id"
     t.bigint "seller_id"
     t.string "status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["customer_id"], name: "index_orders_on_customer_id"
     t.index ["seller_id"], name: "index_orders_on_seller_id"
-    t.index ["shop_id"], name: "index_orders_on_shop_id"
   end
 
   create_table "orders_products", id: false, force: :cascade do |t|
@@ -120,8 +113,8 @@ ActiveRecord::Schema.define(version: 2018_09_25_131223) do
   end
 
   add_foreign_key "customers", "accounts"
+  add_foreign_key "orders", "customers"
   add_foreign_key "orders", "sellers"
-  add_foreign_key "orders", "shops"
   add_foreign_key "products", "shops"
   add_foreign_key "sellers", "accounts"
   add_foreign_key "shops", "accounts"

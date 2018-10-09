@@ -6,11 +6,19 @@ defaults: &defaults
         - all
       api/v1/products:
         - all
+      api/v1/orders:
+        - all
+      api/v1/customers:
+        - all
     seller:
       api/v1/shops:
-        - show # ???!!! shop < = > user ids
+        - show
       api/v1/products:
-        - all # ???!!! shop < = > user ids
+        - all
+      api/v1/customers:
+        - all
+      api/v1/orders:
+        - all
 
 test:
     <<: *defaults

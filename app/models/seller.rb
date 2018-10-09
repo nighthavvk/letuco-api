@@ -10,6 +10,7 @@ class Seller < ApplicationRecord
 
   belongs_to :account
   has_and_belongs_to_many :shops
+  has_many :orders
 
   def admin?
     role == 'admin'
