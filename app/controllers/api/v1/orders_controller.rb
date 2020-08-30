@@ -7,6 +7,7 @@ module Api
       before_action :set_order, only: %i[destroy]
 
       def index
+        # render json: OrderSerializer.new(@shop.orders).serialized_json
         render json: @shop.orders
       end
 

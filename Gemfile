@@ -16,6 +16,7 @@ gem 'omniauth-facebook'
 
 gem 'dotenv-rails', groups: %i[development test]
 
+gem 'active_model_serializers'
 gem 'bootsnap', require: false
 gem 'rack-cors'
 
